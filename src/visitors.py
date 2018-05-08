@@ -1,6 +1,5 @@
-from ast import Section, AddIns, SubIns, MulIns, DivIns, PrintIns, I32Cons, ProgramAst, Register
-from lexer import Token
-
+from ast import Section, AddIns, SubIns, MulIns, DivIns, PrintIns, I32Cons, ProgramAst, Register, I32Ins
+import struct
 
 class PrintVisitor:
     @classmethod
@@ -19,7 +18,7 @@ class PrintVisitor:
         )
 
     @classmethod
-    def visit_i32_ins(cls, i32_stm: I32Cons):
+    def visit_i32_ins(cls, i32_stm: I32Ins):
         return "I32 {} {}".format(cls.print(i32_stm.dest), cls.print(i32_stm.src0))
 
     @classmethod
@@ -73,14 +72,14 @@ class AssemblyVisitor:
     @classmethod
     def visit_program(cls, program: ProgramAst):
         header = b"KNOT"
-        maj_ver = (0).to_bytes(2, 'little')
-        min_ver = (3).to_bytes(2, 'little')
+        maj_ver = struct.pack("<H", 0)
+        min_ver = struct.pack("<H", 3)
 
         byte_code = b"".join([cls.assemble(section)
                               for section in program.sections])
 
-        cns_size = (0).to_bytes(4, 'little')
-        ins_size = len(byte_code).to_bytes(4, 'little')
+        cns_size = struct.pack("<I", 0)
+        ins_size = struct.pack("<I", len(byte_code))
 
         return header + maj_ver + min_ver + cns_size + ins_size + byte_code
 
@@ -90,7 +89,7 @@ class AssemblyVisitor:
                          for instruction in section.instructions])
 
     @classmethod
-    def visit_i32_ins(cls, i32_ins: I32Cons):
+    def visit_i32_ins(cls, i32_ins: I32Ins):
         return b"\x16" + cls.assemble(i32_ins.dest) + \
                cls.assemble(i32_ins.src0)
 
@@ -124,8 +123,8 @@ class AssemblyVisitor:
 
     @classmethod
     def visit_i32_cons(cls, i32_cons: I32Cons):
-        return int(i32_cons.i32_tok.lexeme).to_bytes(4, "little")
+        return struct.pack("<I", int(i32_cons.i32_tok.lexeme))
 
     @classmethod
     def visit_register(cls, reg: Register):
-        return reg.reg_num.to_bytes(1, "little")
+        return struct.pack("<B", reg.reg_num)
