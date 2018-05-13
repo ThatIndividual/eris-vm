@@ -1,6 +1,6 @@
 from typing import List
 
-from ast import Section, I32Ins, AddIns, SubIns, MulIns, DivIns, PrintIns, I32Cons, ProgramAst, Register
+from ast import *
 from lexer import Lexer, Tok
 
 
@@ -25,11 +25,11 @@ class Parser:
         sections = []
         while not self.tok_is([Tok.EOF]):
             sections.append(self.section())
-        return ProgramAst(sections)
+        return Program(sections)
 
     def section(self):
         # section -> section identifier do
-        #                instruction*
+        #                (name? instruction)*
         #            end
         self.tok_consume(Tok.SECTION, "Expected the beginning of a section")
         self.tok_consume(Tok.ID,
@@ -39,17 +39,19 @@ class Parser:
                          "Expected a `do ... end` block after section definition")
         ins = []
         while not self.tok_is([Tok.END, Tok.EOF]):
+            if self.tok_is([Tok.LABEL]):
+                ins.append(self.label())
             ins.append(self.ins())
         self.tok_consume(Tok.END, "Missing `end` keyword after block")
         return Section(id, ins)
 
     def ins(self):
         # instructions -> i32_ins
-        #      | add_ins
-        #      | sub_ins
-        #      | mul_ins
-        #      | div_ins
-        #      | print_ins
+        #               | add_ins
+        #               | sub_ins
+        #               | mul_ins
+        #               | div_ins
+        #               | print_ins
         if self.tok_matches(Tok.I32_INS):
             return self.i32_ins()
         elif self.tok_matches(Tok.ADD_INS):
@@ -62,12 +64,18 @@ class Parser:
             return self.div_ins()
         elif self.tok_matches(Tok.PRINT_INS):
             return self.print_ins()
+        elif self.tok_matches(Tok.JUMP_INS):
+            return self.jump_ins()
+        elif self.tok_matches(Tok.JLT_INS):
+            return self.jlt_ins()
+        else:
+            raise ParserError("Expected an instruction, got {}".format(self.this_tok.kind))
 
     def i32_ins(self):
-        # i32_ins -> ^I32^ register i32_lit
+        # i32_ins -> ^I32^ register lit_i32
         dest = self.register()
-        lit = self.i32_lit()
-        return I32Ins(dest, lit)
+        lit = self.lit_i32()
+        return CnsI32Ins(dest, lit)
 
     def add_ins(self):
         # add_ins -> ^ADD^ register register register
@@ -101,6 +109,17 @@ class Parser:
         # print_ins -> ^PRINT^ register
         return PrintIns(self.register())
 
+    def jump_ins(self):
+        # jump_ins -> ^JUMP^ at_location
+        return JumpIns(self.at_location())
+
+    def jlt_ins(self):
+        # jlt_ins -> ^JLT^ at_location register register
+        location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JltIns(location, src0, src1)
+
     def register(self):
         if self.tok_matches(Tok.ID):
             lexeme = self.prev_tok.lexeme.lower()
@@ -117,11 +136,23 @@ class Parser:
                 raise ParserError("[{}:{}] Expected a register"
                         .format(self.prev_tok.lineno, self.prev_tok.colno))
 
-    def i32_lit(self):
+    def lit_i32(self):
         if self.tok_matches(Tok.I32_LIT):
-            return I32Cons(self.prev_tok)
+            return LitI32(self.prev_tok)
         else:
             raise ParserError(self.this_tok, "Expected a 32 bit integer")
+
+    def label(self):
+        if self.tok_matches(Tok.LABEL):
+            return Label(self.prev_tok.lexeme.lower())
+        else:
+            raise ParserError("Expected a label")
+
+    def at_location(self):
+        if self.tok_matches(Tok.AT_LOCATION):
+            return AtLocation(self.prev_tok.lexeme.lower())
+        else:
+            raise ParserError("Expected an at-location")
 
     def tok_next(self):
         self.prev_tok = self.this_tok

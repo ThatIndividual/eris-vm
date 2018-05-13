@@ -1,4 +1,4 @@
-class ProgramAst:
+class Program:
     def __init__(self, sections):
         self.sections = sections
 
@@ -14,14 +14,13 @@ class Section:
     def accept(self, visitor):
         return visitor.visit_section(self)
 
-
-class I32Ins:
-    def __init__(self, dest, src0):
+class CnsI32Ins:
+    def __init__(self, dest, lit_i32):
         self.dest = dest
-        self.src0 = src0
+        self.lit_i32 = lit_i32
 
     def accept(self, visitor):
-        return visitor.visit_i32_ins(self)
+        return visitor.visit_cns_i32_ins(self)
 
 
 class AddIns:
@@ -72,12 +71,30 @@ class PrintIns:
         return visitor.visit_print_ins(self)
 
 
-class I32Cons:
+class JumpIns:
+    def __init__(self, at_location):
+        self.at_location = at_location
+
+    def accept(self, visitor):
+        return visitor.visit_jump_ins(self)
+
+
+class JltIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+        self.src1 = src1
+
+    def accept(self, visitor):
+        return visitor.visit_jlt_ins(self)
+
+
+class LitI32:
     def __init__(self, i32_tok):
         self.i32_tok = i32_tok
 
     def accept(self, visitor):
-        return visitor.visit_i32_cons(self)
+        return visitor.visit_lit_i32(self)
 
 
 class Register:
@@ -86,3 +103,20 @@ class Register:
 
     def accept(self, visitor):
         return visitor.visit_register(self)
+
+
+class Label:
+    def __init__(self, lexeme: str):
+        self.name = lexeme[:-1]
+
+    def accept(self, visitor):
+        return visitor.visit_label(self)
+
+
+class AtLocation:
+    def __init__(self, name):
+        self.name = name
+        self.address = None
+
+    def accept(self, visitor):
+        return visitor.visit_at_location(self)

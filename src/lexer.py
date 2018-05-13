@@ -20,6 +20,10 @@ class Tok(Enum):
     DIV_INS = "TOK_DIV_INS"
 
     PRINT_INS = "TOK_PRINT"
+    JUMP_INS = "TOK_JUMP"
+    JLT_INS = "TOK_LT_INS"
+    LABEL = "TOK_LABEL"
+    AT_LOCATION = "TOK_AT_LOCATION"
 
 
 keywords = {
@@ -35,7 +39,8 @@ keywords = {
     "div": Tok.DIV_INS,
 
     "print": Tok.PRINT_INS,
-
+    "jump": Tok.JUMP_INS,
+    "jlt": Tok.JLT_INS
 }
 
 
@@ -118,18 +123,23 @@ class Lexer:
 
         if char == "\0":
             return self.tok(Tok.EOF)
-        else:
-            raise LexerError("Unknown character: '{}'".format(char), self.lineno)
+        if char == "@":
+            return self.at_location()
+
+        raise LexerError("Unknown character: '{}'".format(char), self.lineno)
 
     def identifier(self) -> Token:
         while is_alpha_num(self.lookahead()):
             self.char_next()
+        if self.char_matches(':'):
+            return self.tok(Tok.LABEL)
+        else:
+            tok = self.tok(Tok.ID)
+            lexeme = tok.lexeme.lower()
+            if lexeme in keywords:
+                tok.kind = keywords[lexeme]
 
-        tok = self.tok(Tok.ID)
-        if tok.lexeme in keywords:
-            tok.kind = keywords[tok.lexeme.lower()]
-
-        return tok
+            return tok
 
     def number(self) -> Token:
         is_double = False
@@ -137,7 +147,7 @@ class Lexer:
         while True:
             if is_num(self.lookahead()):
                 self.char_next()
-            elif self.lookahead() == ".":
+            elif self.char_matches("."):
                 if not is_double:
                     is_double = True
                     self.char_next()
@@ -147,9 +157,15 @@ class Lexer:
                 break
 
         if is_double:
-            raise LexerError("Floats are not supported")
+            raise LexerError("Floats are not supported", self.lineno)
         else:
             return self.tok(Tok.I32_LIT)
+
+    def at_location(self):
+        self.start = self.index
+        while is_alpha_num(self.lookahead()):
+            self.char_next()
+        return self.tok(Tok.AT_LOCATION)
 
     def skip_space(self):
         while True:
