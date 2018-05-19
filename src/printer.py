@@ -48,12 +48,14 @@ class PrintVisitor(AbstractVisitor):
                                          cls.print(div_stm.src1))
 
     @classmethod
-    def visit_print_ins(cls, print_stm: PrintIns):
-        return "    PRINT {}".format(cls.print(print_stm.src0))
-
-    @classmethod
     def visit_jump_ins(cls, jump_ins: JumpIns):
         return "    JUMP {}".format(cls.print(jump_ins.at_location))
+
+    @classmethod
+    def visit_jeq_ins(cls, jeq_ins: JeqIns):
+        return "    JEQ {} {} {}".format(cls.print(jeq_ins.at_location),
+                                         cls.print(jeq_ins.src0),
+                                         cls.print(jeq_ins.src1))
 
     @classmethod
     def visit_jlt_ins(cls, jlt_ins: JltIns):
@@ -62,7 +64,16 @@ class PrintVisitor(AbstractVisitor):
                                          cls.print(jlt_ins.src1))
 
     @classmethod
-    def visit_lit_i32(self, lit_i32: LitI32):
+    def visit_move_ins(cls, move_ins: MoveIns):
+        return "    MOVE {} {}".format(cls.print(move_ins.dest),
+                                       cls.print(move_ins.src0))
+
+    @classmethod
+    def visit_print_ins(cls, print_stm: PrintIns):
+        return "    PRINT {}".format(cls.print(print_stm.src0))
+
+    @classmethod
+    def visit_lit_i32(cls, lit_i32: LitI32):
         return lit_i32.i32_tok.lexeme
 
     @classmethod
@@ -70,11 +81,11 @@ class PrintVisitor(AbstractVisitor):
         return "R{}".format(reg.reg_num)
 
     @classmethod
-    def visit_label(self, label: Label):
+    def visit_label(cls, label: Label):
         return "{}:".format(label.name)
 
     @classmethod
-    def visit_at_location(self, at_location: AtLocation):
+    def visit_at_location(cls, at_location: AtLocation):
         result = "@{}".format(at_location.name)
         if at_location.address is not None:
             result += "[{}]".format(at_location.address)

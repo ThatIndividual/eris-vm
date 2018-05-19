@@ -181,10 +181,14 @@ void Cpu_run(struct cpu *cpu)
 
     do_cns_i32:
         dest = *cpu->ip++;
-
         cpu->reg[dest] = *(uint32_t *)cpu->ip;
         cpu->ip += 4;
+        DISPATCH();
 
+    do_move:
+        dest = *cpu->ip++;
+        src0 = *cpu->ip++;
+        R(dest) = R(src0);
         DISPATCH();
 
     do_print:
@@ -196,8 +200,7 @@ void Cpu_run(struct cpu *cpu)
     do_eq_i32: do_lt_i32:
     do_add_flt: do_sub_flt: do_mul_flt: do_div_flt: do_eq_flt: do_lt_flt:
     do_i32_to_flt: do_flt_to_i32: do_call: do_ret:
-    do_cns_chr: do_cns_flt: do_cns_str: do_load_glb: do_store_glb: do_move:
-        printf("YYY");
+    do_cns_chr: do_cns_flt: do_cns_str: do_load_glb: do_store_glb:
         return;
 
     #undef R

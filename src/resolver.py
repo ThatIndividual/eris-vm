@@ -12,6 +12,7 @@ class ResolverVisitor(AbstractVisitor):
     reading the instruction and all its arguments. This is relevant when
     calculating jump offsets.
     """
+
     def __init__(self):
         self.local_address = 0
         self.labels = {}
@@ -53,16 +54,23 @@ class ResolverVisitor(AbstractVisitor):
     def visit_div_ins(self, div_ins: DivIns):
         self.local_address += 4
 
-    def visit_print_ins(self, print_ins: PrintIns):
-        self.local_address += 2
-
     def visit_jump_ins(self, jump_ins: JumpIns):
         self.local_address += 2
         self.resolve(jump_ins.at_location)
 
+    def visit_jeq_ins(self, jeq_ins: JeqIns):
+        self.local_address += 4
+        self.resolve(jeq_ins.at_location)
+
     def visit_jlt_ins(self, jlt_ins: JltIns):
         self.local_address += 4
         self.resolve(jlt_ins.at_location)
+
+    def visit_move_ins(self, move_ins: MoveIns):
+        self.local_address += 3
+
+    def visit_print_ins(self, print_ins: PrintIns):
+        self.local_address += 2
 
     def visit_lit_i32(self, lit_i32: LitI32):
         pass

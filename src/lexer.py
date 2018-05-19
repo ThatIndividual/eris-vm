@@ -12,6 +12,8 @@ class Tok(Enum):
 
     DOUBLE = "TOK_DOUBLE"
     I32_LIT = "TOK_I32_LIT"
+    LABEL = "TOK_LABEL"
+    AT_LOCATION = "TOK_AT_LOCATION"
 
     I32_INS = "TOK_I32_INS"
     ADD_INS = "TOK_ADD_INS"
@@ -19,11 +21,11 @@ class Tok(Enum):
     MUL_INS = "TOK_MUL_INS"
     DIV_INS = "TOK_DIV_INS"
 
-    PRINT_INS = "TOK_PRINT"
-    JUMP_INS = "TOK_JUMP"
-    JLT_INS = "TOK_LT_INS"
-    LABEL = "TOK_LABEL"
-    AT_LOCATION = "TOK_AT_LOCATION"
+    JUMP_INS = "TOK_JUMP_INS"
+    JEQ_INS = "TOK_JEQ_INS"
+    JLT_INS = "TOK_JLT_INS"
+    MOVE_INS = "TOK_MOVE_INS"
+    PRINT_INS = "TOK_PRINT_INS"
 
 
 keywords = {
@@ -38,9 +40,11 @@ keywords = {
     "mul": Tok.MUL_INS,
     "div": Tok.DIV_INS,
 
-    "print": Tok.PRINT_INS,
     "jump": Tok.JUMP_INS,
-    "jlt": Tok.JLT_INS
+    "jeq": Tok.JEQ_INS,
+    "jlt": Tok.JLT_INS,
+    "move": Tok.MOVE_INS,
+    "print": Tok.PRINT_INS,
 }
 
 

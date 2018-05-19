@@ -51,6 +51,10 @@ class Parser:
         #               | sub_ins
         #               | mul_ins
         #               | div_ins
+        #               | jump_ins
+        #               | jeq_ins
+        #               | jlt_ins
+        #               | move_ins
         #               | print_ins
         if self.tok_matches(Tok.I32_INS):
             return self.i32_ins()
@@ -62,12 +66,16 @@ class Parser:
             return self.mul_ins()
         elif self.tok_matches(Tok.DIV_INS):
             return self.div_ins()
-        elif self.tok_matches(Tok.PRINT_INS):
-            return self.print_ins()
         elif self.tok_matches(Tok.JUMP_INS):
             return self.jump_ins()
+        elif self.tok_matches(Tok.JEQ_INS):
+            return self.jeq_ins()
         elif self.tok_matches(Tok.JLT_INS):
             return self.jlt_ins()
+        elif self.tok_matches(Tok.MOVE_INS):
+            return self.move_ins()
+        elif self.tok_matches(Tok.PRINT_INS):
+            return self.print_ins()
         else:
             raise ParserError("Expected an instruction, got {}".format(self.this_tok.kind))
 
@@ -105,20 +113,33 @@ class Parser:
         src1 = self.register()
         return DivIns(dest, src0, src1)
 
-    def print_ins(self):
-        # print_ins -> ^PRINT^ register
-        return PrintIns(self.register())
-
     def jump_ins(self):
         # jump_ins -> ^JUMP^ at_location
         return JumpIns(self.at_location())
 
-    def jlt_ins(self):
-        # jlt_ins -> ^JLT^ at_location register register
-        location = self.at_location()
+    def jeq_ins(self):
+        # jeq_ins -> ^JEQ^ at_location register register
+        at_location = self.at_location()
         src0 = self.register()
         src1 = self.register()
-        return JltIns(location, src0, src1)
+        return JeqIns(at_location, src0, src1)
+
+    def jlt_ins(self):
+        # jlt_ins -> ^JLT^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JltIns(at_location, src0, src1)
+
+    def move_ins(self):
+        # move_ins -> ^MOVE^ register register
+        dest = self.register()
+        src0 = self.register()
+        return MoveIns(dest, src0)
+
+    def print_ins(self):
+        # print_ins -> ^PRINT^ register
+        return PrintIns(self.register())
 
     def register(self):
         if self.tok_matches(Tok.ID):

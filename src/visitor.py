@@ -33,15 +33,23 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
-    def visit_print_ins(self, print_ins: PrintIns):
-        pass
-
-    @abstractmethod
     def visit_jump_ins(self, jump_ins: JumpIns):
         pass
 
     @abstractmethod
     def visit_jlt_ins(self, jlt_ins: JltIns):
+        pass
+
+    @abstractmethod
+    def visit_jeq_ins(self, jeq_ins: JeqIns):
+        pass
+
+    @abstractmethod
+    def visit_move_ins(self, move_ins: MoveIns):
+        pass
+
+    @abstractmethod
+    def visit_print_ins(self, print_ins: PrintIns):
         pass
 
     @abstractmethod
@@ -99,6 +107,11 @@ class BaseVisitor(AbstractVisitor):
 
     def visit_jump_ins(self, jump_ins: JumpIns):
         jump_ins.at_location.accept(self)
+
+    def visit_jeq_ins(self, jeq_ins: JeqIns):
+        jeq_ins.at_location.accept(self)
+        jeq_ins.src0.accept(self)
+        jeq_ins.src1.accept(self)
 
     def visit_jlt_ins(self, jlt_ins: JltIns):
         jlt_ins.at_location.accept(self)
