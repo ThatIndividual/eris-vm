@@ -20,6 +20,7 @@ class Tok(Enum):
     SUB_INS = "TOK_SUB_INS"
     MUL_INS = "TOK_MUL_INS"
     DIV_INS = "TOK_DIV_INS"
+    MOD_INS = "TOK_MOD_INS"
 
     JUMP_INS = "TOK_JUMP_INS"
     JEQ_INS = "TOK_JEQ_INS"
@@ -39,6 +40,7 @@ keywords = {
     "sub": Tok.SUB_INS,
     "mul": Tok.MUL_INS,
     "div": Tok.DIV_INS,
+    "mod": Tok.MOD_INS,
 
     "jump": Tok.JUMP_INS,
     "jeq": Tok.JEQ_INS,

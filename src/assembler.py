@@ -8,12 +8,13 @@ bytecode = {
     "sub": b"\x03",
     "mul": b"\x04",
     "div": b"\x05",
-    "jump": b"\x12",
-    "jeq": b"\x13",
-    "jlt": b"\x14",
-    "cns_i32": b"\x16",
-    "move": b"\x1B",
-    "print": b"\x1C",
+    "mod": b"\x06",
+    "jump": b"\x13",
+    "jeq": b"\x14",
+    "jlt": b"\x15",
+    "cns_i32": b"\x17",
+    "move": b"\x1C",
+    "print": b"\x1D",
 }
 
 
@@ -66,6 +67,11 @@ class AssemblerVisitor(AbstractVisitor):
         return bytecode["div"] + self.assemble(div_ins.dest) + \
                self.assemble(div_ins.src0) + \
                self.assemble(div_ins.src1)
+
+    def visit_mod_ins(self, mod_ins: ModIns):
+        return bytecode["mod"] + self.assemble(mod_ins.dest) + \
+               self.assemble(mod_ins.src0) + \
+               self.assemble(mod_ins.src1)
 
     def visit_jump_ins(self, jump_ins: JumpIns):
         return bytecode["jump"] + self.assemble(jump_ins.at_location)

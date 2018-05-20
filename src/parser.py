@@ -51,6 +51,7 @@ class Parser:
         #               | sub_ins
         #               | mul_ins
         #               | div_ins
+        #               | mod_ins
         #               | jump_ins
         #               | jeq_ins
         #               | jlt_ins
@@ -66,6 +67,8 @@ class Parser:
             return self.mul_ins()
         elif self.tok_matches(Tok.DIV_INS):
             return self.div_ins()
+        elif self.tok_matches(Tok.MOD_INS):
+            return self.mod_ins()
         elif self.tok_matches(Tok.JUMP_INS):
             return self.jump_ins()
         elif self.tok_matches(Tok.JEQ_INS):
@@ -112,6 +115,13 @@ class Parser:
         src0 = self.register()
         src1 = self.register()
         return DivIns(dest, src0, src1)
+
+    def mod_ins(self):
+        # mod_ins -> ^MOD^ register register register
+        dest = self.register()
+        src0 = self.register()
+        src1 = self.register()
+        return ModIns(dest, src0, src1)
 
     def jump_ins(self):
         # jump_ins -> ^JUMP^ at_location

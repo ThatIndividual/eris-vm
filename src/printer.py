@@ -48,6 +48,12 @@ class PrintVisitor(AbstractVisitor):
                                          cls.print(div_stm.src1))
 
     @classmethod
+    def visit_mod_ins(cls, mod_ins: ModIns):
+        return "    MOD {} {} {}".format(cls.print(mod_ins.dest),
+                                         cls.print(mod_ins.src0),
+                                         cls.print(mod_ins.src1))
+
+    @classmethod
     def visit_jump_ins(cls, jump_ins: JumpIns):
         return "    JUMP {}".format(cls.print(jump_ins.at_location))
 

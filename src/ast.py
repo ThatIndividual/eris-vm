@@ -63,6 +63,16 @@ class DivIns:
         return visitor.visit_div_ins(self)
 
 
+class ModIns:
+    def __init__(self, dest, src0, src1):
+        self.dest = dest
+        self.src0 = src0
+        self.src1 = src1
+
+    def accept(self, visitor):
+        return visitor.visit_mod_ins(self)
+
+
 class JumpIns:
     def __init__(self, at_location):
         self.at_location = at_location

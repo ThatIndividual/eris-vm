@@ -33,6 +33,10 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
+    def visit_mod_ins(self, mod_ins: ModIns):
+        pass
+
+    @abstractmethod
     def visit_jump_ins(self, jump_ins: JumpIns):
         pass
 

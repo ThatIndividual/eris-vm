@@ -54,6 +54,9 @@ class ResolverVisitor(AbstractVisitor):
     def visit_div_ins(self, div_ins: DivIns):
         self.local_address += 4
 
+    def visit_mod_ins(self, mod_ins: ModIns):
+        self.local_address += 4
+
     def visit_jump_ins(self, jump_ins: JumpIns):
         self.local_address += 2
         self.resolve(jump_ins.at_location)
