@@ -8,5 +8,5 @@ sub entry do
     i32 r0 43
     print r0
 
-    hlt
+    halt
 end

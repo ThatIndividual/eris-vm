@@ -39,10 +39,10 @@ class ResolverVisitor(AbstractVisitor):
             else:
                 raise ResolverError("At-location references non-existing label")
 
-    def visit_hlt_ins(self, hlt_ins: HltIns):
+    def visit_halt_ins(self, halt_ins: HaltIns):
         self.local_address += 1
 
-    def visit_nop_ins(self, nop_ins: NopIns):
+    def visit_noop_ins(self, noop_ins: NoopIns):
         self.local_address += 1
 
     def visit_cns_i32_ins(self, cns_i32_ins: CnsI32Ins):

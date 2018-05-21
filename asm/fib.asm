@@ -8,5 +8,5 @@ step:
     move r1 r2
     move r2 r3
     jlt @step r3 r0
-    hlt
+    halt
 end

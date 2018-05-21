@@ -2,6 +2,7 @@ sub main(*) do
     i32 r0 10
     i32 r1 5
     call rectArea r0 r0
+    halt
 end
 
 sub rectArea(args=2, locs=1) do

@@ -47,7 +47,7 @@ class Parser:
 
     def ins(self):
         # instructions
-        #   -> hlt_ins | nop_ins |
+        #   -> halt_ins | noop_ins |
         #    | i32_ins
         #    | add_ins | sub_ins | mul_ins | div_ins | mod_ins
         #    | jmp_ins
@@ -55,10 +55,10 @@ class Parser:
         #    | jeqz_ins | jnez_ins | jltz_ins | jlez_ins | jgtz_ins | jgez_ins
         #    | move_ins
         #    | print_ins
-        if self.tok_matches(Tok.HLT_INS):
-            return HltIns()
-        elif self.tok_matches(Tok.NOP_INS):
-            return NopIns()
+        if self.tok_matches(Tok.HALT_INS):
+            return HaltIns()
+        elif self.tok_matches(Tok.NOOP_INS):
+            return NoopIns()
         elif self.tok_matches(Tok.I32_INS):
             return self.i32_ins()
         elif self.tok_matches(Tok.ADD_INS):

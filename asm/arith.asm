@@ -7,5 +7,5 @@ sub entry do
     mul r2 r0 r1   print r2
     div r2 r0 r1   print r2
 
-    hlt
+    halt
 end

@@ -13,11 +13,11 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
-    def visit_hlt_ins(self, hlt_ins: HltIns):
+    def visit_halt_ins(self, halt_ins: HaltIns):
         pass
 
     @abstractmethod
-    def visit_nop_ins(self, nop_ins: NopIns):
+    def visit_noop_ins(self, noop_ins: NoopIns):
         pass
 
     @abstractmethod

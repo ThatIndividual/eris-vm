@@ -19,12 +19,12 @@ class PrintVisitor(AbstractVisitor):
         )
 
     @classmethod
-    def visit_hlt_ins(cls, hlt_ins: HltIns):
-        return "    HLT"
+    def visit_halt_ins(cls, halt_ins: HaltIns):
+        return "    HALT"
 
     @classmethod
-    def visit_nop_ins(cls, nop_ins: NopIns):
-        return "    NOP"
+    def visit_noop_ins(cls, noop_ins: NoopIns):
+        return "    NOOP"
 
     @classmethod
     def visit_cns_i32_ins(cls, cns_i32_ins: CnsI32Ins):

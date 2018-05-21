@@ -4,8 +4,8 @@ from ast import *
 from visitor import AbstractVisitor
 
 bytecode = {
-    "hlt": b"\x00",
-    "nop": b"\x01",
+    "halt": b"\x00",
+    "noop": b"\x01",
 
     "add": b"\x02",
     "sbt": b"\x03",
@@ -60,11 +60,11 @@ class AssemblerVisitor(AbstractVisitor):
     def visit_sub_stm(self, sub_stm: SubStm):
         return b"".join([self.assemble(statement) for statement in sub_stm.instructions])
 
-    def visit_hlt_ins(self, hlt_ins: HltIns):
-        return bytecode["hlt"]
+    def visit_halt_ins(self, hlt_ins: HaltIns):
+        return bytecode["halt"]
 
-    def visit_nop_ins(self, nop_ins: NopIns):
-        return bytecode["nop"]
+    def visit_noop_ins(self, nop_ins: NoopIns):
+        return bytecode["noop"]
 
     def visit_cns_i32_ins(self, i32_ins: CnsI32Ins):
         return bytecode["cns_i32"] + self.assemble(i32_ins.dest) + \

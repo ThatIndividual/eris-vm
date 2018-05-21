@@ -15,14 +15,14 @@ class SubStm:
         return visitor.visit_sub_stm(self)
 
 
-class HltIns:
+class HaltIns:
     def accept(self, visitor):
-        return visitor.visit_hlt_ins(self)
+        return visitor.visit_halt_ins(self)
 
 
-class NopIns:
+class NoopIns:
     def accept(self, visitor):
-        return visitor.visit_nop_ins(self)
+        return visitor.visit_noop_ins(self)
 
 
 class CnsI32Ins:

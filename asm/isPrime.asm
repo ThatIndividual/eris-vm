@@ -9,5 +9,5 @@ step:
     jmp @step
 end:
     print r1
-    hlt
+    halt
 end
