@@ -19,6 +19,14 @@ class PrintVisitor(AbstractVisitor):
         )
 
     @classmethod
+    def visit_hlt_ins(cls, hlt_ins: HltIns):
+        return "    HLT"
+
+    @classmethod
+    def visit_nop_ins(cls, nop_ins: NopIns):
+        return "    NOP"
+
+    @classmethod
     def visit_cns_i32_ins(cls, cns_i32_ins: CnsI32Ins):
         return "    I32 {} {}".format(cls.print(cns_i32_ins.dest),
                                       cls.print(cns_i32_ins.lit_i32))

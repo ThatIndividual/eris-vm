@@ -14,6 +14,17 @@ class Section:
     def accept(self, visitor):
         return visitor.visit_section(self)
 
+
+class HltIns:
+    def accept(self, visitor):
+        return visitor.visit_hlt_ins(self)
+
+
+class NopIns:
+    def accept(self, visitor):
+        return visitor.visit_nop_ins(self)
+
+
 class CnsI32Ins:
     def __init__(self, dest, lit_i32):
         self.dest = dest

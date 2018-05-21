@@ -7,4 +7,6 @@ section entry do
 
     i32 r0 43
     print r0
+
+    hlt
 end

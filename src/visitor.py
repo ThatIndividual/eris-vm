@@ -13,6 +13,14 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
+    def visit_hlt_ins(self, hlt_ins: HltIns):
+        pass
+
+    @abstractmethod
+    def visit_nop_ins(self, nop_ins: NopIns):
+        pass
+
+    @abstractmethod
     def visit_cns_i32_ins(self, cns_i32_ins: CnsI32Ins):
         pass
 

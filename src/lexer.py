@@ -15,6 +15,9 @@ class Tok(Enum):
     LABEL = "TOK_LABEL"
     AT_LOCATION = "TOK_AT_LOCATION"
 
+    HLT_INS = "TOK_HLT_INS"
+    NOP_INS = "TOK_NOP_INS"
+
     I32_INS = "TOK_I32_INS"
     ADD_INS = "TOK_ADD_INS"
     SUB_INS = "TOK_SUB_INS"
@@ -45,6 +48,9 @@ keywords = {
     "section": Tok.SECTION,
     "do": Tok.DO,
     "end": Tok.END,
+
+    "hlt": Tok.HLT_INS,
+    "nop": Tok.NOP_INS,
 
     "i32": Tok.I32_INS,
     "add": Tok.ADD_INS,
