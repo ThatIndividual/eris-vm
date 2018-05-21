@@ -6,13 +6,13 @@ class Program:
         return visitor.visit_program(self)
 
 
-class Section:
+class SubStm:
     def __init__(self, id, instructions):
         self.id = id
         self.instructions = instructions
 
     def accept(self, visitor):
-        return visitor.visit_section(self)
+        return visitor.visit_sub(self)
 
 
 class HltIns:
@@ -44,14 +44,14 @@ class AddIns:
         return visitor.visit_add_ins(self)
 
 
-class SubIns:
+class SbtIns:
     def __init__(self, dest, src0, src1):
         self.dest = dest
         self.src0 = src0
         self.src1 = src1
 
     def accept(self, visitor):
-        return visitor.visit_sub_ins(self)
+        return visitor.visit_sbt_ins(self)
 
 
 class MulIns:

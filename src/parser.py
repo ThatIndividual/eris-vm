@@ -28,10 +28,10 @@ class Parser:
         return Program(sections)
 
     def section(self):
-        # section -> section identifier do
+        # section -> sub identifier do
         #                (name? instruction)*
         #            end
-        self.tok_consume(Tok.SECTION, "Expected the beginning of a section")
+        self.tok_consume(Tok.SUB, "Expected the beginning of a section")
         self.tok_consume(Tok.ID,
                          "A section name should follow the `section` keyword")
         id = self.prev_tok
@@ -43,7 +43,7 @@ class Parser:
                 ins.append(self.label())
             ins.append(self.ins())
         self.tok_consume(Tok.END, "Missing `end` keyword after block")
-        return Section(id, ins)
+        return SubStm(id, ins)
 
     def ins(self):
         # instructions
@@ -63,8 +63,8 @@ class Parser:
             return self.i32_ins()
         elif self.tok_matches(Tok.ADD_INS):
             return self.add_ins()
-        elif self.tok_matches(Tok.SUB_INS):
-            return self.sub_ins()
+        elif self.tok_matches(Tok.SBT_INS):
+            return self.sbt_ins()
         elif self.tok_matches(Tok.MUL_INS):
             return self.mul_ins()
         elif self.tok_matches(Tok.DIV_INS):
@@ -119,12 +119,12 @@ class Parser:
         src1 = self.register()
         return AddIns(dest, src0, src1)
 
-    def sub_ins(self):
-        # sub_ins -> ^SUB^ register register register
+    def sbt_ins(self):
+        # sbt_ins -> ^SBT^ register register register
         dest = self.register()
         src0 = self.register()
         src1 = self.register()
-        return SubIns(dest, src0, src1)
+        return SbtIns(dest, src0, src1)
 
     def mul_ins(self):
         # mul_ins -> ^MUL^ register register register

@@ -8,7 +8,7 @@ bytecode = {
     "nop": b"\x01",
 
     "add": b"\x02",
-    "sub": b"\x03",
+    "sbt": b"\x03",
     "mul": b"\x04",
     "div": b"\x05",
     "mod": b"\x06",
@@ -57,8 +57,8 @@ class AssemblerVisitor(AbstractVisitor):
 
         return header + maj_ver + min_ver + cns_size + ins_size + byte_code
 
-    def visit_section(self, section: Section):
-        return b"".join([self.assemble(statement) for statement in section.instructions])
+    def visit_sub(self, sub_stm: SubStm):
+        return b"".join([self.assemble(statement) for statement in sub_stm.instructions])
 
     def visit_hlt_ins(self, hlt_ins: HltIns):
         return bytecode["hlt"]
@@ -75,10 +75,10 @@ class AssemblerVisitor(AbstractVisitor):
                self.assemble(add_ins.src0) + \
                self.assemble(add_ins.src1)
 
-    def visit_sub_ins(self, sub_ins: AddIns):
-        return bytecode["sub"] + self.assemble(sub_ins.dest) + \
-               self.assemble(sub_ins.src0) + \
-               self.assemble(sub_ins.src1)
+    def visit_sbt_ins(self, sbt_ins: AddIns):
+        return bytecode["sbt"] + self.assemble(sbt_ins.dest) + \
+               self.assemble(sbt_ins.src0) + \
+               self.assemble(sbt_ins.src1)
 
     def visit_mul_ins(self, mul_ins: AddIns):
         return bytecode["mul"] + self.assemble(mul_ins.dest) + \

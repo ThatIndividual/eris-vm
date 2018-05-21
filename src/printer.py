@@ -12,10 +12,10 @@ class PrintVisitor(AbstractVisitor):
         return "".join([cls.print(section) for section in program.sections])
 
     @classmethod
-    def visit_section(cls, section_stm: Section):
+    def visit_sub(cls, sub_stm: SubStm):
         return "section {} do\n{}end\n".format(
-            section_stm.id.lexeme,
-            "".join(["{}\n".format(cls.print(i)) for i in section_stm.instructions])
+            sub_stm.id.lexeme,
+            "".join(["{}\n".format(cls.print(i)) for i in sub_stm.instructions])
         )
 
     @classmethod
@@ -38,10 +38,10 @@ class PrintVisitor(AbstractVisitor):
                                          cls.print(add_stm.src1))
 
     @classmethod
-    def visit_sub_ins(cls, sub_stm: SubIns):
-        return "    SUB {} {} {}".format(cls.print(sub_stm.dest),
-                                         cls.print(sub_stm.src0),
-                                         cls.print(sub_stm.src1))
+    def visit_sbt_ins(cls, sbt_stm: SbtIns):
+        return "    SBT {} {} {}".format(cls.print(sbt_stm.dest),
+                                         cls.print(sbt_stm.src0),
+                                         cls.print(sbt_stm.src1))
 
     @classmethod
     def visit_mul_ins(cls, mul_stm: MulIns):

@@ -1,4 +1,4 @@
-section entry do
+sub entry do
     i32 r0 1000
     i32 r1 0
     i32 r2 1

@@ -6,7 +6,7 @@ class Tok(Enum):
     EOF = "TOK_EOF"
 
     ID = "TOK_ID"
-    SECTION = "TOK_SECTION"
+    SUB = "TOK_SUB"
     DO = "TOK_DO"
     END = "TOK_END"
 
@@ -20,7 +20,7 @@ class Tok(Enum):
 
     I32_INS = "TOK_I32_INS"
     ADD_INS = "TOK_ADD_INS"
-    SUB_INS = "TOK_SUB_INS"
+    SBT_INS = "TOK_SBT_INS"
     MUL_INS = "TOK_MUL_INS"
     DIV_INS = "TOK_DIV_INS"
     MOD_INS = "TOK_MOD_INS"
@@ -45,7 +45,7 @@ class Tok(Enum):
 
 keywords = {
     "id": Tok.ID,
-    "section": Tok.SECTION,
+    "sub": Tok.SUB,
     "do": Tok.DO,
     "end": Tok.END,
 
@@ -54,7 +54,7 @@ keywords = {
 
     "i32": Tok.I32_INS,
     "add": Tok.ADD_INS,
-    "sub": Tok.SUB_INS,
+    "sbt": Tok.SBT_INS,
     "mul": Tok.MUL_INS,
     "div": Tok.DIV_INS,
     "mod": Tok.MOD_INS,

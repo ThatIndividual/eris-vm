@@ -9,7 +9,7 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
-    def visit_section(self, section: Section):
+    def visit_sub(self, sub_stm: SubStm):
         pass
 
     @abstractmethod
@@ -29,7 +29,7 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
-    def visit_sub_ins(self, sub_ins: SubIns):
+    def visit_sbt_ins(self, sub_ins: SbtIns):
         pass
 
     @abstractmethod

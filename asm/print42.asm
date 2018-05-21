@@ -1,4 +1,4 @@
-section entry do
+sub entry do
     i32 r0 41
     print r0
 

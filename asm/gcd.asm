@@ -1,4 +1,4 @@
-section entry do
+sub entry do
     i32 r0 54321
     i32 r1 9876
 step:

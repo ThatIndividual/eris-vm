@@ -25,12 +25,12 @@ class ResolverVisitor(AbstractVisitor):
         for section in program.sections:
             self.resolve(section)
 
-    def visit_section(self, section: Section):
+    def visit_sub(self, sub_stm: SubStm):
         self.local_address = 0
         self.labels = {}
         self.unresolved = []
 
-        for statement in section.instructions:
+        for statement in sub_stm.instructions:
             self.resolve(statement)
         for at_location, at_address in self.unresolved:
             at_name = at_location.name
@@ -51,7 +51,7 @@ class ResolverVisitor(AbstractVisitor):
     def visit_add_ins(self, add_ins: AddIns):
         self.local_address += 4
 
-    def visit_sub_ins(self, sub_ins: SubIns):
+    def visit_sbt_ins(self, sub_ins: SbtIns):
         self.local_address += 4
 
     def visit_mul_ins(self, mul_ins: MulIns):
