@@ -63,8 +63,8 @@ class Parser:
             return self.i32_ins()
         elif self.tok_matches(Tok.ADD_INS):
             return self.add_ins()
-        elif self.tok_matches(Tok.SBT_INS):
-            return self.sbt_ins()
+        elif self.tok_matches(Tok.SUB):
+            return self.sub_ins()
         elif self.tok_matches(Tok.MUL_INS):
             return self.mul_ins()
         elif self.tok_matches(Tok.DIV_INS):
@@ -119,12 +119,12 @@ class Parser:
         src1 = self.register()
         return AddIns(dest, src0, src1)
 
-    def sbt_ins(self):
-        # sbt_ins -> ^SBT^ register register register
+    def sub_ins(self):
+        # sub_ins -> ^SUB^ register register register
         dest = self.register()
         src0 = self.register()
         src1 = self.register()
-        return SbtIns(dest, src0, src1)
+        return SubIns(dest, src0, src1)
 
     def mul_ins(self):
         # mul_ins -> ^MUL^ register register register

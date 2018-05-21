@@ -20,7 +20,7 @@ class Tok(Enum):
 
     I32_INS = "TOK_I32_INS"
     ADD_INS = "TOK_ADD_INS"
-    SBT_INS = "TOK_SBT_INS"
+    # SUB_INS = "TOK_SUB"
     MUL_INS = "TOK_MUL_INS"
     DIV_INS = "TOK_DIV_INS"
     MOD_INS = "TOK_MOD_INS"
@@ -54,7 +54,7 @@ keywords = {
 
     "i32": Tok.I32_INS,
     "add": Tok.ADD_INS,
-    "sbt": Tok.SBT_INS,
+    # "sub": Tok.SUB,
     "mul": Tok.MUL_INS,
     "div": Tok.DIV_INS,
     "mod": Tok.MOD_INS,

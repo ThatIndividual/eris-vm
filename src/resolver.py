@@ -25,7 +25,7 @@ class ResolverVisitor(AbstractVisitor):
         for section in program.sections:
             self.resolve(section)
 
-    def visit_sub(self, sub_stm: SubStm):
+    def visit_sub_stm(self, sub_stm: SubStm):
         self.local_address = 0
         self.labels = {}
         self.unresolved = []
@@ -51,7 +51,7 @@ class ResolverVisitor(AbstractVisitor):
     def visit_add_ins(self, add_ins: AddIns):
         self.local_address += 4
 
-    def visit_sbt_ins(self, sub_ins: SbtIns):
+    def visit_sub_ins(self, sub_ins: SubIns):
         self.local_address += 4
 
     def visit_mul_ins(self, mul_ins: MulIns):

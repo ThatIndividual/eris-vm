@@ -57,7 +57,7 @@ class AssemblerVisitor(AbstractVisitor):
 
         return header + maj_ver + min_ver + cns_size + ins_size + byte_code
 
-    def visit_sub(self, sub_stm: SubStm):
+    def visit_sub_stm(self, sub_stm: SubStm):
         return b"".join([self.assemble(statement) for statement in sub_stm.instructions])
 
     def visit_hlt_ins(self, hlt_ins: HltIns):
@@ -75,17 +75,17 @@ class AssemblerVisitor(AbstractVisitor):
                self.assemble(add_ins.src0) + \
                self.assemble(add_ins.src1)
 
-    def visit_sbt_ins(self, sbt_ins: AddIns):
-        return bytecode["sbt"] + self.assemble(sbt_ins.dest) + \
-               self.assemble(sbt_ins.src0) + \
-               self.assemble(sbt_ins.src1)
+    def visit_sub_ins(self, sub_ins: SubIns):
+        return bytecode["sbt"] + self.assemble(sub_ins.dest) + \
+               self.assemble(sub_ins.src0) + \
+               self.assemble(sub_ins.src1)
 
-    def visit_mul_ins(self, mul_ins: AddIns):
+    def visit_mul_ins(self, mul_ins: MulIns):
         return bytecode["mul"] + self.assemble(mul_ins.dest) + \
                self.assemble(mul_ins.src0) + \
                self.assemble(mul_ins.src1)
 
-    def visit_div_ins(self, div_ins: AddIns):
+    def visit_div_ins(self, div_ins: DivIns):
         return bytecode["div"] + self.assemble(div_ins.dest) + \
                self.assemble(div_ins.src0) + \
                self.assemble(div_ins.src1)
