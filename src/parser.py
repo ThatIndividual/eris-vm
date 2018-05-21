@@ -46,17 +46,14 @@ class Parser:
         return Section(id, ins)
 
     def ins(self):
-        # instructions -> i32_ins
-        #               | add_ins
-        #               | sub_ins
-        #               | mul_ins
-        #               | div_ins
-        #               | mod_ins
-        #               | jump_ins
-        #               | jeq_ins
-        #               | jlt_ins
-        #               | move_ins
-        #               | print_ins
+        # instructions
+        #   -> i32_ins
+        #    | add_ins | sub_ins | mul_ins | div_ins | mod_ins
+        #    | jmp_ins
+        #    | jeq_ins | jne_ins | jlt_ins | jle_ins | jgt_ins | jge_ins
+        #    | jeqz_ins | jnez_ins | jltz_ins | jlez_ins | jgtz_ins | jgez_ins
+        #    | move_ins
+        #    | print_ins
         if self.tok_matches(Tok.I32_INS):
             return self.i32_ins()
         elif self.tok_matches(Tok.ADD_INS):
@@ -69,12 +66,34 @@ class Parser:
             return self.div_ins()
         elif self.tok_matches(Tok.MOD_INS):
             return self.mod_ins()
-        elif self.tok_matches(Tok.JUMP_INS):
-            return self.jump_ins()
+
+        elif self.tok_matches(Tok.JMP_INS):
+            return self.jmp_ins()
         elif self.tok_matches(Tok.JEQ_INS):
             return self.jeq_ins()
+        elif self.tok_matches(Tok.JNE_INS):
+            return self.jne_ins()
         elif self.tok_matches(Tok.JLT_INS):
             return self.jlt_ins()
+        elif self.tok_matches(Tok.JLE_INS):
+            return self.jle_ins()
+        elif self.tok_matches(Tok.JGT_INS):
+            return self.jgt_ins()
+        elif self.tok_matches(Tok.JGE_INS):
+            return self.jge_ins()
+        elif self.tok_matches(Tok.JEQZ_INS):
+            return self.jeqz_ins()
+        elif self.tok_matches(Tok.JNEZ_INS):
+            return self.jnez_ins()
+        elif self.tok_matches(Tok.JLTZ_INS):
+            return self.jltz_ins()
+        elif self.tok_matches(Tok.JLEZ_INS):
+            return self.jlez_ins()
+        elif self.tok_matches(Tok.JGTZ_INS):
+            return self.jgtz_ins()
+        elif self.tok_matches(Tok.JGEZ_INS):
+            return self.jgez_ins()
+
         elif self.tok_matches(Tok.MOVE_INS):
             return self.move_ins()
         elif self.tok_matches(Tok.PRINT_INS):
@@ -123,9 +142,9 @@ class Parser:
         src1 = self.register()
         return ModIns(dest, src0, src1)
 
-    def jump_ins(self):
-        # jump_ins -> ^JUMP^ at_location
-        return JumpIns(self.at_location())
+    def jmp_ins(self):
+        # jmp_ins -> ^JMP^ at_location
+        return JmpIns(self.at_location())
 
     def jeq_ins(self):
         # jeq_ins -> ^JEQ^ at_location register register
@@ -134,12 +153,82 @@ class Parser:
         src1 = self.register()
         return JeqIns(at_location, src0, src1)
 
+    def jne_ins(self):
+        # jne_ins -> ^JNE^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JneIns(at_location, src0, src1)
+
     def jlt_ins(self):
         # jlt_ins -> ^JLT^ at_location register register
         at_location = self.at_location()
         src0 = self.register()
         src1 = self.register()
         return JltIns(at_location, src0, src1)
+
+    def jle_ins(self):
+        # jle_ins -> ^JLE^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JleIns(at_location, src0, src1)
+
+    def jgt_ins(self):
+        # jgt_ins -> ^JGT^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JgtIns(at_location, src0, src1)
+
+    def jge_ins(self):
+        # jge_ins -> ^JGE^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JgeIns(at_location, src0, src1)
+
+    def jeqz_ins(self):
+        # jeqz_ins -> ^JEQZ^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JeqzIns(at_location, src0, src1)
+
+    def jnez_ins(self):
+        # jnez_ins -> ^JNEZ^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JnezIns(at_location, src0, src1)
+
+    def jltz_ins(self):
+        # jltz_ins -> ^JLTZ^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JltzIns(at_location, src0, src1)
+
+    def jlez_ins(self):
+        # jlez_ins -> ^JLEZ^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JlezIns(at_location, src0, src1)
+
+    def jgtz_ins(self):
+        # jgtz_ins -> ^JGTZ^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JgtzIns(at_location, src0, src1)
+
+    def jgez_ins(self):
+        # jgez_ins -> ^JGEZ^ at_location register register
+        at_location = self.at_location()
+        src0 = self.register()
+        src1 = self.register()
+        return JgezIns(at_location, src0, src1)
 
     def move_ins(self):
         # move_ins -> ^MOVE^ register register

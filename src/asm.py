@@ -16,7 +16,6 @@ if __name__ == "__main__":
             text = source.read() + "\0"
             ast = par.parse(text)
             ast.accept(ResolverVisitor())
-            print(ast.accept(PrintVisitor))
             asm = ast.accept(AssemblerVisitor())
             destination.write(asm)
     else:

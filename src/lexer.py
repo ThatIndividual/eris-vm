@@ -22,9 +22,20 @@ class Tok(Enum):
     DIV_INS = "TOK_DIV_INS"
     MOD_INS = "TOK_MOD_INS"
 
-    JUMP_INS = "TOK_JUMP_INS"
+    JMP_INS = "TOK_JMP_INS"
     JEQ_INS = "TOK_JEQ_INS"
+    JNE_INS = "TOK_JNE_INS"
     JLT_INS = "TOK_JLT_INS"
+    JLE_INS = "TOK_JLE_INS"
+    JGT_INS = "TOK_JGT_INS"
+    JGE_INS = "TOK_JGE_INS"
+    JEQZ_INS = "TOK_JEQZ_INS"
+    JNEZ_INS = "TOK_JNEZ_INS"
+    JLTZ_INS = "TOK_JLTZ_INS"
+    JLEZ_INS = "TOK_JLEZ_INS"
+    JGTZ_INS = "TOK_JGTZ_INS"
+    JGEZ_INS = "TOK_JGEZ_INS"
+
     MOVE_INS = "TOK_MOVE_INS"
     PRINT_INS = "TOK_PRINT_INS"
 
@@ -42,9 +53,20 @@ keywords = {
     "div": Tok.DIV_INS,
     "mod": Tok.MOD_INS,
 
-    "jump": Tok.JUMP_INS,
+    "jmp": Tok.JMP_INS,
     "jeq": Tok.JEQ_INS,
+    "jne": Tok.JNE_INS,
     "jlt": Tok.JLT_INS,
+    "jle": Tok.JLE_INS,
+    "jgt": Tok.JGT_INS,
+    "jge": Tok.JGE_INS,
+    "jeqz": Tok.JEQZ_INS,
+    "jnez": Tok.JNEZ_INS,
+    "jltz": Tok.JLTZ_INS,
+    "jlez": Tok.JLEZ_INS,
+    "jgtz": Tok.JGTZ_INS,
+    "jgez": Tok.JGEZ_INS,
+
     "move": Tok.MOVE_INS,
     "print": Tok.PRINT_INS,
 }

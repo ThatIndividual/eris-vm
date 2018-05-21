@@ -73,12 +73,12 @@ class ModIns:
         return visitor.visit_mod_ins(self)
 
 
-class JumpIns:
+class JmpIns:
     def __init__(self, at_location):
         self.at_location = at_location
 
     def accept(self, visitor):
-        return visitor.visit_jump_ins(self)
+        return visitor.visit_jmp_ins(self)
 
 
 class JeqIns:
@@ -91,6 +91,16 @@ class JeqIns:
         return visitor.visit_jeq_ins(self)
 
 
+class JneIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+        self.src1 = src1
+
+    def accept(self, visitor):
+        return visitor.visit_jne_ins(self)
+
+
 class JltIns:
     def __init__(self, at_location, src0, src1):
         self.at_location = at_location
@@ -99,6 +109,90 @@ class JltIns:
 
     def accept(self, visitor):
         return visitor.visit_jlt_ins(self)
+
+
+class JleIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+        self.src1 = src1
+
+    def accept(self, visitor):
+        return visitor.visit_jle_ins(self)
+
+
+class JgtIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+        self.src1 = src1
+
+    def accept(self, visitor):
+        return visitor.visit_jgt_ins(self)
+
+
+class JgeIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+        self.src1 = src1
+
+    def accept(self, visitor):
+        return visitor.visit_jge_ins(self)
+
+
+class JeqzIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+
+    def accept(self, visitor):
+        return visitor.visit_jeqz_ins(self)
+
+
+class JnezIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+
+    def accept(self, visitor):
+        return visitor.visit_jnez_ins(self)
+
+
+class JltzIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+
+    def accept(self, visitor):
+        return visitor.visit_jltz_ins(self)
+
+
+class JlezIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+
+    def accept(self, visitor):
+        return visitor.visit_jlez_ins(self)
+
+
+class JgtzIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+
+    def accept(self, visitor):
+        return visitor.visit_jgtz_ins(self)
+
+
+class JgezIns:
+    def __init__(self, at_location, src0, src1):
+        self.at_location = at_location
+        self.src0 = src0
+
+    def accept(self, visitor):
+        return visitor.visit_jgez_ins(self)
 
 
 class MoveIns:

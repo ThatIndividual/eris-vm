@@ -7,19 +7,29 @@
 #include <inttypes.h>
 
 enum ins {
-    HALT, NOOP, ADD_I32, SUB_I32, MUL_I32, DIV_I32, MOD_I32, EQ_I32, LT_I32,
-    ADD_FLT, SUB_FLT, MUL_FLT, DIV_FLT, EQ_FLT, LT_FLT, I32_TO_FLT, FLT_TO_I32,
-    CALL, RET, JMP, JMP_EQ, JMP_LT, CNS_CHR, CNS_I32, CNS_FLT, CNS_STR,
+    HALT, NOOP,
+    ADD_I32, SUB_I32, MUL_I32, DIV_I32, MOD_I32,
+    ADD_FLT, SUB_FLT, MUL_FLT, DIV_FLT,
+    I32_TO_FLT, FLT_TO_I32,
+    CALL, RET,
+    JMP,
+    JMP_EQ, JMP_NE, JMP_LT, JMP_LE, JMP_GT, JMP_GE,
+    JMP_EQZ, JMP_NEZ, JMP_LTZ, JMP_LEZ, JMP_GTZ, JMP_GEZ,
+    CNS_CHR, CNS_I32, CNS_FLT, CNS_STR,
     LOAD_GLB, STORE_GLB, MOVE, PRINT, __N_INS
 };
 
 char *ins_label[] = {
-    "halt", "noop", "add i32", "sub i32", "mul i32", "div i32", "mod i32",
-    "equals i32", "less than i32", "add float", "sub float", "mul float",
-    "div float", "equals float", "less than float", "i32 to float",
-    "float to i32", "call", "return", "jump", "jump if equal",
-    "jump if less than", "const char", "const i32", "const float",
-    "const string", "load global", "store global", "move", "print"
+    "halt", "noop",
+    "add_i32", "sub_i32", "mul_i32", "div_i32", "mod_i32",
+    "add_flt", "sub_flt", "mul_flt", "div_flt",
+    "i32_to_flt", "flt_to_i32",
+    "call", "ret",
+    "jmp",
+    "jeq", "jne", "jlt", "jle", "jgt", "jge",
+    "jeqz", "jnez", "jltz", "jlez", "jgtz", "jgez",
+    "cns_chr", "cns_i32", "cns_flt", "cns_str",
+    "load_glb", "store_glb", "move", "print"
 };
 
 struct obj {
@@ -56,7 +66,7 @@ int main(int argc, char *argv[])
 {
 //     int i;
 //     for (i = 0; i < __N_INS; i++) {
-//         printf("%02X %s\n", i, ins_label[i]);
+//         printf("\"%s\": b\"\\x%02X\",\n", ins_label[i], i);
 //     }
 
     if (argc == 2) {
@@ -114,12 +124,17 @@ void Cpu_run(struct cpu *cpu)
     uint32_t dest, src0, src1;
     int8_t adrs;
     static void *dispatch_table[] = {
-        &&do_halt, &&do_noop, &&do_add_i32, &&do_sub_i32, &&do_mul_i32,
-        &&do_div_i32, &&do_mod_i32, &&do_eq_i32, &&do_lt_i32, &&do_add_flt,
-        &&do_sub_flt, &&do_mul_flt, &&do_div_flt, &&do_eq_flt, &&do_lt_flt,
-        &&do_i32_to_flt, &&do_flt_to_i32, &&do_call, &&do_ret, &&do_jmp,
-        &&do_jmp_eq, &&do_jmp_lt, &&do_cns_chr, &&do_cns_i32, &&do_cns_flt,
-        &&do_cns_str, &&do_load_glb, &&do_store_glb, &&do_move, &&do_print
+        &&do_halt, &&do_noop,
+        &&do_add_i32, &&do_sub_i32, &&do_mul_i32, &&do_div_i32, &&do_mod_i32,
+        &&do_add_flt, &&do_sub_flt, &&do_mul_flt, &&do_div_flt,
+        &&do_i32_to_flt, &&do_flt_to_i32,
+        &&do_call, &&do_ret,
+        &&do_jmp,
+        &&do_jmp_eq, &&do_jmp_ne, &&do_jmp_lt, &&do_jmp_le, &&do_jmp_gt, &&do_jmp_ge,
+        &&do_jmp_eqz, &&do_jmp_nez, &&do_jmp_ltz, &&do_jmp_lez, &&do_jmp_gtz, &&do_jmp_gez,
+
+        &&do_cns_chr, &&do_cns_i32, &&do_cns_flt, &&do_cns_str,
+        &&do_load_glb, &&do_store_glb, &&do_move, &&do_print
     };
     #define DISPATCH() goto *dispatch_table[*cpu->ip++]
     #define R(x) (cpu->reg[(x)])
@@ -167,21 +182,74 @@ void Cpu_run(struct cpu *cpu)
         cpu->ip += adrs;
         DISPATCH();
 
+    #define CMP_JMP(op) \
+        do { \
+            adrs = *cpu->ip++; \
+            src0 = *cpu->ip++; \
+            src1 = *cpu->ip++; \
+            if (R(src0) op R(src1)) \
+                cpu->ip += adrs; \
+        } while(0);
+
     do_jmp_eq:
-        adrs = *cpu->ip++;
-        src0 = *cpu->ip++;
-        src1 = *cpu->ip++;
-        if (R(src0) == R(src1))
-            cpu->ip += adrs;
+        CMP_JMP(==);
+        DISPATCH();
+
+    do_jmp_ne:
+        CMP_JMP(!=);
         DISPATCH();
 
     do_jmp_lt:
-        adrs = *cpu->ip++;
-        src0 = *cpu->ip++;
-        src1 = *cpu->ip++;
-        if (R(src0) < R(src1))
-            cpu->ip += adrs;
+        CMP_JMP(<)
         DISPATCH();
+
+    do_jmp_le:
+        CMP_JMP(<=);
+        DISPATCH();
+
+    do_jmp_gt:
+        CMP_JMP(>);
+        DISPATCH();
+
+    do_jmp_ge:
+        CMP_JMP(>=);
+        DISPATCH();
+
+    #undef CMP_JMP
+
+    #define CMPZ_JMP(op) \
+        do { \
+            adrs = *cpu->ip++; \
+            src0 = *cpu->ip++; \
+            if (R(src0) op 0) \
+                cpu->ip += adrs; \
+        } while(0);
+
+    do_jmp_eqz:
+        CMPZ_JMP(==);
+        DISPATCH();
+
+    do_jmp_nez:
+        CMPZ_JMP(!=);
+        DISPATCH();
+
+    do_jmp_ltz:
+        CMPZ_JMP(<);
+        DISPATCH();
+
+    do_jmp_lez:
+        CMPZ_JMP(<=);
+        DISPATCH();
+
+    do_jmp_gtz:
+        CMPZ_JMP(>);
+        DISPATCH();
+
+    do_jmp_gez:
+        CMPZ_JMP(>=);
+        DISPATCH();
+
+    #undef CMPZ_JMP
 
     do_cns_i32:
         dest = *cpu->ip++;
@@ -201,8 +269,7 @@ void Cpu_run(struct cpu *cpu)
         DISPATCH();
 
     /* unimplemented */
-    do_eq_i32: do_lt_i32:
-    do_add_flt: do_sub_flt: do_mul_flt: do_div_flt: do_eq_flt: do_lt_flt:
+    do_add_flt: do_sub_flt: do_mul_flt: do_div_flt:
     do_i32_to_flt: do_flt_to_i32: do_call: do_ret:
     do_cns_chr: do_cns_flt: do_cns_str: do_load_glb: do_store_glb:
         return;

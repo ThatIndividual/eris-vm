@@ -57,17 +57,57 @@ class ResolverVisitor(AbstractVisitor):
     def visit_mod_ins(self, mod_ins: ModIns):
         self.local_address += 4
 
-    def visit_jump_ins(self, jump_ins: JumpIns):
+    def visit_jmp_ins(self, jmp_ins: JmpIns):
         self.local_address += 2
-        self.resolve(jump_ins.at_location)
+        self.resolve(jmp_ins.at_location)
 
     def visit_jeq_ins(self, jeq_ins: JeqIns):
         self.local_address += 4
         self.resolve(jeq_ins.at_location)
 
+    def visit_jne_ins(self, jne_ins: JneIns):
+        self.local_address += 4
+        self.resolve(jne_ins.at_location)
+
     def visit_jlt_ins(self, jlt_ins: JltIns):
         self.local_address += 4
         self.resolve(jlt_ins.at_location)
+
+    def visit_jle_ins(self, jle_ins: JleIns):
+        self.local_address += 4
+        self.resolve(jle_ins.at_location)
+
+    def visit_jgt_ins(self, jgt_ins: JgtIns):
+        self.local_address += 4
+        self.resolve(jgt_ins.at_location)
+
+    def visit_jge_ins(self, jge_ins: JgeIns):
+        self.local_address += 4
+        self.resolve(jge_ins.at_location)
+
+    def visit_jeqz_ins(self, jeqz_ins: JeqzIns):
+        self.local_address += 3
+        self.resolve(jeqz_ins.at_location)
+
+    def visit_jnez_ins(self, jnez_ins: JnezIns):
+        self.local_address += 3
+        self.resolve(jnez_ins.at_location)
+
+    def visit_jltz_ins(self, jltz_ins: JltzIns):
+        self.local_address += 3
+        self.resolve(jltz_ins.at_location)
+
+    def visit_jlez_ins(self, jlez_ins: JlezIns):
+        self.local_address += 3
+        self.resolve(jlez_ins.at_location)
+
+    def visit_jgtz_ins(self, jgtz_ins: JgtzIns):
+        self.local_address += 3
+        self.resolve(jgtz_ins.at_location)
+
+    def visit_jgez_ins(self, jgez_ins: JgezIns):
+        self.local_address += 3
+        self.resolve(jgez_ins.at_location)
 
     def visit_move_ins(self, move_ins: MoveIns):
         self.local_address += 3
