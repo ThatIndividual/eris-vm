@@ -9,11 +9,11 @@ class PrintVisitor(AbstractVisitor):
 
     @classmethod
     def visit_program(cls, program: Program):
-        return "".join([cls.print(section) for section in program.sections])
+        return "".join([cls.print(section) for section in program.subs])
 
     @classmethod
     def visit_sub_stm(cls, sub_stm: SubStm):
-        return "section {} do\n{}end\n".format(
+        return "sub {} do\n{}end\n".format(
             sub_stm.id.lexeme,
             "".join(["{}\n".format(cls.print(i)) for i in sub_stm.instructions])
         )

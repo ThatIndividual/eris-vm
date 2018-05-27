@@ -49,8 +49,9 @@ class AssemblerVisitor(AbstractVisitor):
         maj_ver = struct.pack("<H", 0)
         min_ver = struct.pack("<H", 4)
 
-        byte_code = b"".join([self.assemble(section)
-                              for section in program.sections])
+        entry_code = self.assemble(program.subs[0])
+        other_code = b"".join([self.assemble(sub) for sub in program.subs[1:]])
+        byte_code = entry_code + b"\x00" + other_code
 
         cns_size = struct.pack("<I", 0)
         ins_size = struct.pack("<I", len(byte_code))

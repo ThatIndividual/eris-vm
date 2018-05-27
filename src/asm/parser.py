@@ -21,29 +21,41 @@ class Parser:
         return self.program()
 
     def program(self):
-        # program -> section* "EOF"
+        # program -> sub* "EOF"
         sections = []
         while not self.tok_is([Tok.EOF]):
-            sections.append(self.section())
+            sections.append(self.sub())
         return Program(sections)
 
-    def section(self):
-        # section -> sub identifier do
+    def sub(self):
+        # sub -> "sub" identifier "(" "args" "=" int "," "locs" "=" int ")" "do"
         #                (name? instruction)*
-        #            end
-        self.tok_consume(Tok.SUB, "Expected the beginning of a section")
-        self.tok_consume(Tok.ID,
-                         "A section name should follow the `section` keyword")
+        #        "end"
+        args = 0
+        locs = 0
+
+        self.tok_consume(Tok.SUB, "Expected the beginning of a sub")
+        self.tok_consume(Tok.ID, "A sub name should follow the `sub` keyword")
         id = self.prev_tok
-        self.tok_consume(Tok.DO,
-                         "Expected a `do ... end` block after section definition")
+        self.tok_consume(Tok.LPAR, "Expected an opening paren after subroutine name")
+        self.tok_consume(Tok.ARGS, "Expected an \"args\" argument.")
+        self.tok_consume(Tok.EQ, "Expected an equals after \"args\" argument")
+        args = self.lit_i32()
+        self.tok_consume(Tok.COMMA, "Expected a comma separating \"args\" from \"locs\"")
+        self.tok_consume(Tok.LOCS, "Expected a \"locs\" argument.")
+        self.tok_consume(Tok.EQ, "Expected an equals after \"locs\" argument")
+        locs = self.lit_i32()
+        self.tok_consume(Tok.RPAR, "Expected a closing paren after subroutine "
+                                   "argument list")
+        self.tok_consume(Tok.DO, "Expected a `do ... end` block after sub definition")
+
         ins = []
         while not self.tok_is([Tok.END, Tok.EOF]):
             if self.tok_is([Tok.LABEL]):
                 ins.append(self.label())
             ins.append(self.ins())
         self.tok_consume(Tok.END, "Missing `end` keyword after block")
-        return SubStm(id, ins)
+        return SubStm(id, ins, args, locs)
 
     def ins(self):
         # instructions

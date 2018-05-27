@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from assembler import AssemblerVisitor
 from parser import Parser
-from printer import PrintVisitor
 from resolver import ResolverVisitor
 
 if __name__ == "__main__":

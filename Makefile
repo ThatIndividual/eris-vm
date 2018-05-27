@@ -1,12 +1,12 @@
-ASM = ./src/asm.py
+ASM = ./src/asm/asm.py
 
 ASSEMBLY = arith fib gcd isPrime loop print42
-AUR_TRG = $(addprefix obj/, $(addsuffix .aur, $(ASSEMBLY)))
+AUR_TRG = $(addprefix aur-code/, $(addsuffix .aur, $(ASSEMBLY)))
 
 default : gordias $(AUR_TRG)
 
-gordias : gordias.c
-	gcc gordias.c -o gordias
+gordias : src/vm/gordias.c
+	gcc src/vm/gordias.c -o gordias
 
-obj/%.aur : asm/%.asm
+aur-code/%.aur : asm-code/%.asm
 	$(ASM) $< $@

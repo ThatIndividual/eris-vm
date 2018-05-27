@@ -97,9 +97,8 @@ struct obj *Obj_read(const char *filename)
     fread(obj->cns, 1, obj->header.cns_size, file);
 
     /* read instructions */
-    obj->ins = calloc(obj->header.ins_size + 1, 1);
+    obj->ins = calloc(obj->header.ins_size, 1);
     fread(obj->ins, 1, obj->header.ins_size, file);
-    obj->ins[obj->header.ins_size] = HALT;
 
     return obj;
 }

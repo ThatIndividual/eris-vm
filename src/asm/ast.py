@@ -1,15 +1,17 @@
 class Program:
-    def __init__(self, sections):
-        self.sections = sections
+    def __init__(self, subs):
+        self.subs = subs
 
     def accept(self, visitor):
         return visitor.visit_program(self)
 
 
 class SubStm:
-    def __init__(self, id, instructions):
+    def __init__(self, id, instructions, args, locs):
         self.id = id
         self.instructions = instructions
+        self.args = args
+        self.locs = locs
 
     def accept(self, visitor):
         return visitor.visit_sub_stm(self)

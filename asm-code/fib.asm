@@ -1,4 +1,4 @@
-sub entry do
+sub main(args=0, locs=4) do
     i32 r0 1000
     i32 r1 0
     i32 r2 1
@@ -8,5 +8,4 @@ step:
     move r1 r2
     move r2 r3
     jlt @step r3 r0
-    halt
 end

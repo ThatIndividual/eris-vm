@@ -1,4 +1,4 @@
-sub entry do
+sub main(args=0, locs=3) do
     i32 r0 54321
     i32 r1 9876
 step:
@@ -9,5 +9,4 @@ step:
     jmp @step
 end:
     print r0
-    halt
 end

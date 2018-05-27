@@ -9,6 +9,12 @@ class Tok(Enum):
     SUB = "TOK_SUB"
     DO = "TOK_DO"
     END = "TOK_END"
+    ARGS = "TOK_ARGS"
+    LOCS = "TOK_LOCS"
+    LPAR = "TOK_LPAR"
+    RPAR = "TOK_RPAR"
+    EQ = "TOK_EQ"
+    COMMA = "TOK_COMMA"
 
     DOUBLE = "TOK_DOUBLE"
     I32_LIT = "TOK_I32_LIT"
@@ -48,6 +54,8 @@ keywords = {
     "sub": Tok.SUB,
     "do": Tok.DO,
     "end": Tok.END,
+    "args": Tok.ARGS,
+    "locs": Tok.LOCS,
 
     "halt": Tok.HALT_INS,
     "noop": Tok.NOOP_INS,
@@ -157,8 +165,16 @@ class Lexer:
 
         if char == "\0":
             return self.tok(Tok.EOF)
-        if char == "@":
+        elif char == "@":
             return self.at_location()
+        elif char == "(":
+            return self.tok(Tok.LPAR)
+        elif char == ")":
+            return self.tok(Tok.RPAR)
+        elif char == "=":
+            return self.tok(Tok.EQ)
+        elif char == ",":
+            return self.tok(Tok.COMMA)
 
         raise LexerError("Unknown character: '{}'".format(char), self.lineno)
 
