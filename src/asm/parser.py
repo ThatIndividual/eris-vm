@@ -62,6 +62,7 @@ class Parser:
         #   -> halt_ins | noop_ins |
         #    | i32_ins
         #    | add_ins | sub_ins | mul_ins | div_ins | mod_ins
+        #    | call_ins | ret_ins
         #    | jmp_ins
         #    | jeq_ins | jne_ins | jlt_ins | jle_ins | jgt_ins | jge_ins
         #    | jeqz_ins | jnez_ins | jltz_ins | jlez_ins | jgtz_ins | jgez_ins
@@ -73,6 +74,7 @@ class Parser:
             return NoopIns()
         elif self.tok_matches(Tok.I32_INS):
             return self.i32_ins()
+
         elif self.tok_matches(Tok.ADD_INS):
             return self.add_ins()
         elif self.tok_matches(Tok.SUB):
@@ -83,6 +85,11 @@ class Parser:
             return self.div_ins()
         elif self.tok_matches(Tok.MOD_INS):
             return self.mod_ins()
+
+        elif self.tok_matches(Tok.CALL_INS):
+            return self.call_ins()
+        elif self.tok_matches(Tok.RET_INS):
+            return self.ret_ins()
 
         elif self.tok_matches(Tok.JMP_INS):
             return self.jmp_ins()
@@ -116,7 +123,7 @@ class Parser:
         elif self.tok_matches(Tok.PRINT_INS):
             return self.print_ins()
         else:
-            raise ParserError("Expected an instruction, got {}".format(self.this_tok.kind))
+            raise ParserError("Expected an instruction, got {}".format(self.this_tok.lexeme))
 
     def i32_ins(self):
         # i32_ins -> ^I32^ register lit_i32
@@ -158,6 +165,19 @@ class Parser:
         src0 = self.register()
         src1 = self.register()
         return ModIns(dest, src0, src1)
+
+    def call_ins(self):
+        # call_ins -> ^CALL^ id register register
+        self.tok_consume(Tok.ID, "Expected a subroutine name")
+        id = self.prev_tok
+        dest = self.register()
+        src0 = self.register()
+        return CallIns(id, dest, src0)
+
+    def ret_ins(self):
+        # ret_ins -> ^RET^ register
+        src0 = self.register()
+        return RetIns(src0)
 
     def jmp_ins(self):
         # jmp_ins -> ^JMP^ at_location

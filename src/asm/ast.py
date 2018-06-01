@@ -12,6 +12,7 @@ class SubStm:
         self.instructions = instructions
         self.args = args
         self.locs = locs
+        self.address = None
 
     def accept(self, visitor):
         return visitor.visit_sub_stm(self)
@@ -84,6 +85,25 @@ class ModIns:
 
     def accept(self, visitor):
         return visitor.visit_mod_ins(self)
+
+
+class CallIns:
+    def __init__(self, id, dest, src0):
+        self.id = id
+        self.sub = None
+        self.dest = dest
+        self.src0 = src0
+
+    def accept(self, visitor):
+        return visitor.visit_call_ins(self)
+
+
+class RetIns:
+    def __init__(self, src0):
+        self.src0 = src0
+
+    def accept(self, visitor):
+        return visitor.visit_ret_ins(self)
 
 
 class JmpIns:

@@ -45,6 +45,14 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
+    def visit_call_ins(self, call_ins: CallIns):
+        pass
+
+    @abstractmethod
+    def visit_ret_ins(self, ret_ins: RetIns):
+        pass
+
+    @abstractmethod
     def visit_jmp_ins(self, jmp_ins: JmpIns):
         pass
 

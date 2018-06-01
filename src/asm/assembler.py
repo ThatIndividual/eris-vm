@@ -1,4 +1,4 @@
-import struct
+from struct import pack
 
 from ast import *
 from visitor import AbstractVisitor
@@ -41,24 +41,38 @@ class AssemblerError(Exception):
 
 
 class AssemblerVisitor(AbstractVisitor):
+    def __init__(self):
+        self.sub_desciptions = []
+
     def assemble(self, node):
         return node.accept(self)
 
     def visit_program(self, program: Program):
         header = b"\xCA\x11\x15\x71"
-        maj_ver = struct.pack("<H", 0)
-        min_ver = struct.pack("<H", 4)
+        maj_ver = pack("<H", 0)
+        min_ver = pack("<H", 4)
 
         entry_code = self.assemble(program.subs[0])
         other_code = b"".join([self.assemble(sub) for sub in program.subs[1:]])
-        byte_code = entry_code + b"\x00" + other_code
+        ins_code = entry_code + b"\x00" + other_code
 
-        cns_size = struct.pack("<I", 0)
-        ins_size = struct.pack("<I", len(byte_code))
+        sub_desc = b""
+        for sd in self.sub_desciptions:
+            sub_desc += pack("<I", sd[0]) + \
+                        pack("<H", sd[1]) + \
+                        pack("<H", sd[2])
 
-        return header + maj_ver + min_ver + cns_size + ins_size + byte_code
+        sub_desc_size = pack("<I", len(self.sub_desciptions))
+        ins_size = pack("<I", len(ins_code))
+
+        return header + maj_ver + min_ver + \
+               sub_desc_size + ins_size + \
+               sub_desc + ins_code
 
     def visit_sub_stm(self, sub_stm: SubStm):
+        self.sub_desciptions.append((sub_stm.address,
+                                     int(sub_stm.args.i32_tok.lexeme),
+                                     int(sub_stm.locs.i32_tok.lexeme)))
         return b"".join([self.assemble(statement) for statement in sub_stm.instructions])
 
     def visit_halt_ins(self, hlt_ins: HaltIns):
@@ -161,13 +175,13 @@ class AssemblerVisitor(AbstractVisitor):
         return bytecode["print"] + self.assemble(print_ins.src0)
 
     def visit_register(self, reg: Register):
-        return struct.pack("<B", reg.reg_num)
+        return pack("<B", reg.reg_num)
 
     def visit_lit_i32(self, lit_i32: LitI32):
-        return struct.pack("<I", int(lit_i32.i32_tok.lexeme))
+        return pack("<I", int(lit_i32.i32_tok.lexeme))
 
     def visit_label(self, label: Label):
         return b""
 
     def visit_at_location(self, at_location: AtLocation):
-        return struct.pack("<b", at_location.address)
+        return pack("<b", at_location.address)

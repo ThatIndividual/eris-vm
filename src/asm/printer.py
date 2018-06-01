@@ -9,13 +9,15 @@ class PrintVisitor(AbstractVisitor):
 
     @classmethod
     def visit_program(cls, program: Program):
-        return "".join([cls.print(section) for section in program.subs])
+        return "\n".join([cls.print(section) for section in program.subs])
 
     @classmethod
     def visit_sub_stm(cls, sub_stm: SubStm):
-        return "sub {} do\n{}end\n".format(
+        return "sub {}(args={}, locs={}) do\n{}\nend\n".format(
             sub_stm.id.lexeme,
-            "".join(["{}\n".format(cls.print(i)) for i in sub_stm.instructions])
+            cls.print(sub_stm.args),
+            cls.print(sub_stm.locs),
+            "\n".join([cls.print(i) for i in sub_stm.instructions])
         )
 
     @classmethod
@@ -62,6 +64,16 @@ class PrintVisitor(AbstractVisitor):
                                          cls.print(mod_ins.src1))
 
     @classmethod
+    def visit_call_ins(cls, call_ins: CallIns):
+        return "    CALL {} {} {}".format(call_ins.id.lexeme,
+                                          cls.print(call_ins.dest),
+                                          cls.print(call_ins.src0))
+
+    @classmethod
+    def visit_ret_ins(cls, ret_ins: RetIns):
+        return "    RET {}".format(cls.print(ret_ins.src0))
+
+    @classmethod
     def visit_jmp_ins(cls, jmp_ins: JmpIns):
         return "    JMP {}".format(cls.print(jmp_ins.at_location))
 
@@ -103,39 +115,33 @@ class PrintVisitor(AbstractVisitor):
 
     @classmethod
     def visit_jeqz_ins(cls, jeqz_ins: JeqzIns):
-        return "    JGEZ {} {} {}".format(cls.print(jeqz_ins.at_location),
-                                          cls.print(jeqz_ins.src0),
-                                          cls.print(jeqz_ins.src1))
+        return "    JGEZ {} {}".format(cls.print(jeqz_ins.at_location),
+                                          cls.print(jeqz_ins.src0))
 
     @classmethod
     def visit_jnez_ins(cls, jnez_ins: JnezIns):
-        return "    JNEZ {} {} {}".format(cls.print(jnez_ins.at_location),
-                                          cls.print(jnez_ins.src0),
-                                          cls.print(jnez_ins.src1))
+        return "    JNEZ {} {}".format(cls.print(jnez_ins.at_location),
+                                          cls.print(jnez_ins.src0))
 
     @classmethod
     def visit_jltz_ins(cls, jltz_ins: JltzIns):
-        return "    JLTZ {} {} {}".format(cls.print(jltz_ins.at_location),
-                                          cls.print(jltz_ins.src0),
-                                          cls.print(jltz_ins.src1))
+        return "    JLTZ {} {}".format(cls.print(jltz_ins.at_location),
+                                          cls.print(jltz_ins.src0))
 
     @classmethod
     def visit_jlez_ins(cls, jlez_ins: JlezIns):
-        return "    JLEZ {} {} {}".format(cls.print(jlez_ins.at_location),
-                                          cls.print(jlez_ins.src0),
-                                          cls.print(jlez_ins.src1))
+        return "    JLEZ {} {}".format(cls.print(jlez_ins.at_location),
+                                          cls.print(jlez_ins.src0))
 
     @classmethod
     def visit_jgtz_ins(cls, jgtz_ins: JgtzIns):
-        return "    JGTZ {} {} {}".format(cls.print(jgtz_ins.at_location),
-                                          cls.print(jgtz_ins.src0),
-                                          cls.print(jgtz_ins.src1))
+        return "    JGTZ {} {}".format(cls.print(jgtz_ins.at_location),
+                                          cls.print(jgtz_ins.src0))
 
     @classmethod
     def visit_jgez_ins(cls, jgez_ins: JgezIns):
-        return "    JGEZ {} {} {}".format(cls.print(jgez_ins.at_location),
-                                          cls.print(jgez_ins.src0),
-                                          cls.print(jgez_ins.src1))
+        return "    JGEZ {} {}".format(cls.print(jgez_ins.at_location),
+                                          cls.print(jgez_ins.src0))
 
     @classmethod
     def visit_move_ins(cls, move_ins: MoveIns):

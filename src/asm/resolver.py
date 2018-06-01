@@ -18,7 +18,8 @@ class ResolverVisitor(AbstractVisitor):
         self.cur_sub = 0
         self.labels = {}
         self.subs = {}
-        self.unresolved = []
+        self.unresolved_labels = []
+        self.unresolved_calls = []
 
     @property
     def global_addr(self):
@@ -28,18 +29,33 @@ class ResolverVisitor(AbstractVisitor):
         node.accept(self)
 
     def visit_program(self, program: Program):
-        for sub in program.subs:
+        for i, sub in enumerate(program.subs):
+            sub_name = sub.id.lexeme
+            if sub_name in self.subs:
+                raise ResolverError("Subroutine {} is already defined.".format(sub_name))
+            else:
+                self.subs[sub_name] = i
             self.resolve(sub)
+
+        for call in self.unresolved_calls:
+            sub_name = call.id.lexeme
+            if sub_name in self.subs:
+                call.sub = self.subs[sub_name]
+            else:
+                raise ResolverError("Unknown subroutine {}".format(sub_name))
 
     def visit_sub_stm(self, sub_stm: SubStm):
         self.cur_sub += self.local_addr
         self.local_addr = 0
         self.labels = {}
-        self.unresolved = []
+        self.unresolved_labels = []
+
+        sub_stm.address = self.global_addr
 
         for statement in sub_stm.instructions:
             self.resolve(statement)
-        for at_location, at_address in self.unresolved:
+
+        for at_location, at_address in self.unresolved_labels:
             at_name = at_location.name
             if at_name in self.labels:
                 at_location.address = self.labels[at_name] - at_address
@@ -69,6 +85,12 @@ class ResolverVisitor(AbstractVisitor):
 
     def visit_mod_ins(self, mod_ins: ModIns):
         self.local_addr += 4
+
+    def visit_call_ins(self, call_ins: CallIns):
+        self.local_addr += 4
+
+    def visit_ret_ins(self, ret_ins: RetIns):
+        self.local_addr += 2
 
     def visit_jmp_ins(self, jmp_ins: JmpIns):
         self.local_addr += 2
@@ -141,4 +163,4 @@ class ResolverVisitor(AbstractVisitor):
             raise ResolverError("Duplicate label declarations inside the same scope")
 
     def visit_at_location(self, at_location: AtLocation):
-        self.unresolved.append((at_location, self.local_addr))
+        self.unresolved_labels.append((at_location, self.local_addr))

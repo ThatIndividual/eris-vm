@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from assembler import AssemblerVisitor
 from parser import Parser
+from printer import PrintVisitor
 from resolver import ResolverVisitor
 
 if __name__ == "__main__":
@@ -14,8 +15,9 @@ if __name__ == "__main__":
                 open(args[1], "wb") as destination:
             text = source.read() + "\0"
             ast = par.parse(text)
-            ast.accept(ResolverVisitor())
-            asm = ast.accept(AssemblerVisitor())
-            destination.write(asm)
+            print(PrintVisitor.print(ast))
+            # ast.accept(ResolverVisitor())
+            # asm = ast.accept(AssemblerVisitor())
+            # destination.write(asm)
     else:
         print("Usage: ./asm.py [input] [output]")

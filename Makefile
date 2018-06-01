@@ -7,7 +7,7 @@ VM_SRC = $(addprefix src/vm/, run.c evm.c obj.c)
 default : eris $(AUR_TRG)
 
 eris : $(VM_SRC)
-	gcc $(VM_SRC) -o eris
+	gcc $(VM_SRC) -O3 -o eris
 
 aur-code/%.aur : asm-code/%.asm
 	$(ASM) $< $@

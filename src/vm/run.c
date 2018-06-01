@@ -81,6 +81,16 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     #undef ARITH_I32
 
+    do_call:
+//        sub = *ip++;
+//        dest = *ip++;
+//        src0 = *ip++;
+        DISPATCH();
+
+    do_ret:
+//        src0 = *ip++;
+        DISPATCH();
+
     do_jmp:
         adrs = *ip++;
         ip += adrs;
@@ -174,7 +184,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     /* unimplemented */
     do_add_flt: do_sub_flt: do_mul_flt: do_div_flt:
-    do_i32_to_flt: do_flt_to_i32: do_call: do_ret:
+    do_i32_to_flt: do_flt_to_i32:
     do_cns_chr: do_cns_flt: do_cns_str: do_load_glb: do_store_glb:
         return;
 
