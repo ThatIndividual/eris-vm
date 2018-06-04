@@ -29,70 +29,70 @@ class NoopIns:
 
 
 class CnsI32Ins:
-    def __init__(self, dest, lit_i32):
-        self.dest = dest
+    def __init__(self, lit_i32, dest):
         self.lit_i32 = lit_i32
+        self.dest = dest
 
     def accept(self, visitor):
         return visitor.visit_cns_i32_ins(self)
 
 
 class AddIns:
-    def __init__(self, dest, src0, src1):
-        self.dest = dest
+    def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
+        self.dest = dest
 
     def accept(self, visitor):
         return visitor.visit_add_ins(self)
 
 
 class SubIns:
-    def __init__(self, dest, src0, src1):
-        self.dest = dest
+    def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
+        self.dest = dest
 
     def accept(self, visitor):
         return visitor.visit_sub_ins(self)
 
 
 class MulIns:
-    def __init__(self, dest, src0, src1):
-        self.dest = dest
+    def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
+        self.dest = dest
 
     def accept(self, visitor):
         return visitor.visit_mul_ins(self)
 
 
 class DivIns:
-    def __init__(self, dest, src0, src1):
-        self.dest = dest
+    def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
+        self.dest = dest
 
     def accept(self, visitor):
         return visitor.visit_div_ins(self)
 
 
 class ModIns:
-    def __init__(self, dest, src0, src1):
-        self.dest = dest
+    def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
+        self.dest = dest
 
     def accept(self, visitor):
         return visitor.visit_mod_ins(self)
 
 
 class CallIns:
-    def __init__(self, id, dest, src0):
+    def __init__(self, id, src0, dest):
         self.id = id
         self.sub = None
-        self.dest = dest
         self.src0 = src0
+        self.dest = dest
 
     def accept(self, visitor):
         return visitor.visit_call_ins(self)
@@ -229,9 +229,9 @@ class JgezIns:
 
 
 class MoveIns:
-    def __init__(self, dest, src0):
-        self.dest = dest
+    def __init__(self, src0, dest):
         self.src0 = src0
+        self.dest = dest
 
     def accept(self, visitor):
         return visitor.visit_move_ins(self)

@@ -126,53 +126,53 @@ class Parser:
             raise ParserError("Expected an instruction, got {}".format(self.this_tok.lexeme))
 
     def i32_ins(self):
-        # i32_ins -> ^I32^ register lit_i32
-        dest = self.register()
+        # i32_ins -> ^I32^ lit_i32 register
         lit = self.lit_i32()
-        return CnsI32Ins(dest, lit)
+        dest = self.register()
+        return CnsI32Ins(lit, dest)
 
     def add_ins(self):
         # add_ins -> ^ADD^ register register register
-        dest = self.register()
         src0 = self.register()
         src1 = self.register()
-        return AddIns(dest, src0, src1)
+        dest = self.register()
+        return AddIns(src0, src1, dest)
 
     def sub_ins(self):
         # sub_ins -> ^SUB^ register register register
-        dest = self.register()
         src0 = self.register()
         src1 = self.register()
-        return SubIns(dest, src0, src1)
+        dest = self.register()
+        return SubIns(src0, src1, dest)
 
     def mul_ins(self):
         # mul_ins -> ^MUL^ register register register
-        dest = self.register()
         src0 = self.register()
         src1 = self.register()
-        return MulIns(dest, src0, src1)
+        dest = self.register()
+        return MulIns(src0, src1, dest)
 
     def div_ins(self):
         # div_ins -> ^DIV^ register register register
-        dest = self.register()
         src0 = self.register()
         src1 = self.register()
-        return DivIns(dest, src0, src1)
+        dest = self.register()
+        return DivIns(src0, src1, dest)
 
     def mod_ins(self):
         # mod_ins -> ^MOD^ register register register
-        dest = self.register()
         src0 = self.register()
         src1 = self.register()
-        return ModIns(dest, src0, src1)
+        dest = self.register()
+        return ModIns(src0, src1, dest)
 
     def call_ins(self):
         # call_ins -> ^CALL^ id register register
         self.tok_consume(Tok.ID, "Expected a subroutine name")
         id = self.prev_tok
-        dest = self.register()
         src0 = self.register()
-        return CallIns(id, dest, src0)
+        dest = self.register()
+        return CallIns(id, src0, dest)
 
     def ret_ins(self):
         # ret_ins -> ^RET^ register
@@ -269,9 +269,9 @@ class Parser:
 
     def move_ins(self):
         # move_ins -> ^MOVE^ register register
-        dest = self.register()
         src0 = self.register()
-        return MoveIns(dest, src0)
+        dest = self.register()
+        return MoveIns(src0, dest)
 
     def print_ins(self):
         # print_ins -> ^PRINT^ register

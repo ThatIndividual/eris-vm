@@ -30,44 +30,44 @@ class PrintVisitor(AbstractVisitor):
 
     @classmethod
     def visit_cns_i32_ins(cls, cns_i32_ins: CnsI32Ins):
-        return "    I32 {} {}".format(cls.print(cns_i32_ins.dest),
-                                      cls.print(cns_i32_ins.lit_i32))
+        return "    I32 {} {}".format(cls.print(cns_i32_ins.lit_i32),
+                                      cls.print(cns_i32_ins.dest))
 
     @classmethod
     def visit_add_ins(cls, add_stm: AddIns):
-        return "    ADD {} {} {}".format(cls.print(add_stm.dest),
-                                         cls.print(add_stm.src0),
-                                         cls.print(add_stm.src1))
+        return "    ADD {} {} {}".format(cls.print(add_stm.src0),
+                                         cls.print(add_stm.src1),
+                                         cls.print(add_stm.dest))
 
     @classmethod
     def visit_sub_ins(cls, sub_stm: SubIns):
-        return "    SBT {} {} {}".format(cls.print(sub_stm.dest),
-                                         cls.print(sub_stm.src0),
-                                         cls.print(sub_stm.src1))
+        return "    SBT {} {} {}".format(cls.print(sub_stm.src0),
+                                         cls.print(sub_stm.src1),
+                                         cls.print(sub_stm.dest))
 
     @classmethod
     def visit_mul_ins(cls, mul_stm: MulIns):
-        return "    MUL {} {} {}".format(cls.print(mul_stm.dest),
-                                         cls.print(mul_stm.src0),
-                                         cls.print(mul_stm.src1))
+        return "    MUL {} {} {}".format(cls.print(mul_stm.src0),
+                                         cls.print(mul_stm.src1),
+                                         cls.print(mul_stm.dest))
 
     @classmethod
     def visit_div_ins(cls, div_stm: DivIns):
-        return "    DIV {} {} {}".format(cls.print(div_stm.dest),
-                                         cls.print(div_stm.src0),
-                                         cls.print(div_stm.src1))
+        return "    DIV {} {} {}".format(cls.print(div_stm.src0),
+                                         cls.print(div_stm.src1),
+                                         cls.print(div_stm.dest))
 
     @classmethod
     def visit_mod_ins(cls, mod_ins: ModIns):
-        return "    MOD {} {} {}".format(cls.print(mod_ins.dest),
-                                         cls.print(mod_ins.src0),
-                                         cls.print(mod_ins.src1))
+        return "    MOD {} {} {}".format(cls.print(mod_ins.src0),
+                                         cls.print(mod_ins.src1),
+                                         cls.print(mod_ins.dest))
 
     @classmethod
     def visit_call_ins(cls, call_ins: CallIns):
         return "    CALL {} {} {}".format(call_ins.id.lexeme,
-                                          cls.print(call_ins.dest),
-                                          cls.print(call_ins.src0))
+                                          cls.print(call_ins.src0),
+                                          cls.print(call_ins.dest))
 
     @classmethod
     def visit_ret_ins(cls, ret_ins: RetIns):
@@ -145,8 +145,8 @@ class PrintVisitor(AbstractVisitor):
 
     @classmethod
     def visit_move_ins(cls, move_ins: MoveIns):
-        return "    MOVE {} {}".format(cls.print(move_ins.dest),
-                                       cls.print(move_ins.src0))
+        return "    MOVE {} {}".format(cls.print(move_ins.src0),
+                                       cls.print(move_ins.dest))
 
     @classmethod
     def visit_print_ins(cls, print_stm: PrintIns):

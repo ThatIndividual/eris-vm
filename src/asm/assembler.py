@@ -82,97 +82,122 @@ class AssemblerVisitor(AbstractVisitor):
         return bytecode["noop"]
 
     def visit_cns_i32_ins(self, i32_ins: CnsI32Ins):
-        return bytecode["cns_i32"] + self.assemble(i32_ins.dest) + \
-               self.assemble(i32_ins.lit_i32)
+        return bytecode["cns_i32"] + self.assemble(i32_ins.lit_i32) + \
+               self.assemble(i32_ins.dest)
 
     def visit_add_ins(self, add_ins: AddIns):
-        return bytecode["add"] + self.assemble(add_ins.dest) + \
+        return bytecode["add"] + \
                self.assemble(add_ins.src0) + \
-               self.assemble(add_ins.src1)
+               self.assemble(add_ins.src1) + \
+               self.assemble(add_ins.dest)
 
     def visit_sub_ins(self, sub_ins: SubIns):
-        return bytecode["sbt"] + self.assemble(sub_ins.dest) + \
+        return bytecode["sbt"] + \
                self.assemble(sub_ins.src0) + \
-               self.assemble(sub_ins.src1)
+               self.assemble(sub_ins.src1) + \
+               self.assemble(sub_ins.dest)
 
     def visit_mul_ins(self, mul_ins: MulIns):
-        return bytecode["mul"] + self.assemble(mul_ins.dest) + \
+        return bytecode["mul"] + \
                self.assemble(mul_ins.src0) + \
-               self.assemble(mul_ins.src1)
+               self.assemble(mul_ins.src1) + \
+               self.assemble(mul_ins.dest)
 
     def visit_div_ins(self, div_ins: DivIns):
-        return bytecode["div"] + self.assemble(div_ins.dest) + \
+        return bytecode["div"] + \
                self.assemble(div_ins.src0) + \
-               self.assemble(div_ins.src1)
+               self.assemble(div_ins.src1) + \
+               self.assemble(div_ins.dest)
 
     def visit_mod_ins(self, mod_ins: ModIns):
-        return bytecode["mod"] + self.assemble(mod_ins.dest) + \
+        return bytecode["mod"] + \
                self.assemble(mod_ins.src0) + \
-               self.assemble(mod_ins.src1)
+               self.assemble(mod_ins.src1) + \
+               self.assemble(mod_ins.dest)
+
+    def visit_call_ins(self, call_ins: CallIns):
+        pass
+
+    def visit_ret_ins(self, ret_ins: RetIns):
+        pass
 
     def visit_jmp_ins(self, jmp_ins: JmpIns):
         return bytecode["jmp"] + self.assemble(jmp_ins.at_location)
 
     def visit_jeq_ins(self, jeq_ins: JeqIns):
-        return bytecode["jeq"] + self.assemble(jeq_ins.at_location) + \
+        return bytecode["jeq"] + \
+               self.assemble(jeq_ins.at_location) + \
                self.assemble(jeq_ins.src0) + \
                self.assemble(jeq_ins.src1)
 
     def visit_jne_ins(self, jne_ins: JneIns):
-        return bytecode["jeq"] + self.assemble(jne_ins.at_location) + \
+        return bytecode["jeq"] + \
+               self.assemble(jne_ins.at_location) + \
                self.assemble(jne_ins.src0) + \
                self.assemble(jne_ins.src1)
 
     def visit_jlt_ins(self, jlt_ins: JltIns):
-        return bytecode["jlt"] + self.assemble(jlt_ins.at_location) + \
+        return bytecode["jlt"] + \
+               self.assemble(jlt_ins.at_location) + \
                self.assemble(jlt_ins.src0) + \
                self.assemble(jlt_ins.src1)
 
     def visit_jle_ins(self, jle_ins: JleIns):
-        return bytecode["jle"] + self.assemble(jle_ins.at_location) + \
+        return bytecode["jle"] + \
+               self.assemble(jle_ins.at_location) + \
                self.assemble(jle_ins.src0) + \
                self.assemble(jle_ins.src1)
 
     def visit_jgt_ins(self, jgt_ins: JgtIns):
-        return bytecode["jgt"] + self.assemble(jgt_ins.at_location) + \
+        return bytecode["jgt"] + \
+               self.assemble(jgt_ins.at_location) + \
                self.assemble(jgt_ins.src0) + \
                self.assemble(jgt_ins.src1)
 
     def visit_jge_ins(self, jge_ins: JgeIns):
-        return bytecode["jge"] + self.assemble(jge_ins.at_location) + \
+        return bytecode["jge"] + \
+               self.assemble(jge_ins.at_location) + \
                self.assemble(jge_ins.src0) + \
                self.assemble(jge_ins.src1)
 
     def visit_jeqz_ins(self, jeqz_ins: JeqzIns):
-        return bytecode["jeqz"] + self.assemble(jeqz_ins.at_location) + \
+        return bytecode["jeqz"] + \
+               self.assemble(jeqz_ins.at_location) + \
                self.assemble(jeqz_ins.src0)
 
     def visit_jnez_ins(self, jnez_ins: JnezIns):
-        return bytecode["jnez"] + self.assemble(jnez_ins.at_location) + \
+        return bytecode["jnez"] + \
+               self.assemble(jnez_ins.at_location) + \
                self.assemble(jnez_ins.src0)
 
     def visit_jltz_ins(self, jltz_ins: JltzIns):
-        return bytecode["jltz"] + self.assemble(jltz_ins.at_location) + \
+        return bytecode["jltz"] + \
+               self.assemble(jltz_ins.at_location) + \
                self.assemble(jltz_ins.src0)
 
     def visit_jlez_ins(self, jlez_ins: JlezIns):
-        return bytecode["jlez"] + self.assemble(jlez_ins.at_location) + \
+        return bytecode["jlez"] + \
+               self.assemble(jlez_ins.at_location) + \
                self.assemble(jlez_ins.src0)
 
     def visit_jgtz_ins(self, jgtz_ins: JgtzIns):
-        return bytecode["jgtz"] + self.assemble(jgtz_ins.at_location) + \
+        return bytecode["jgtz"] + \
+               self.assemble(jgtz_ins.at_location) + \
                self.assemble(jgtz_ins.src0)
 
     def visit_jgez_ins(self, jgez_ins: JgezIns):
-        return bytecode["jgez"] + self.assemble(jgez_ins.at_location) + \
+        return bytecode["jgez"] + \
+               self.assemble(jgez_ins.at_location) + \
                self.assemble(jgez_ins.src0)
 
     def visit_move_ins(self, move_ins: MoveIns):
-        return bytecode["move"] + self.assemble(move_ins.dest) + \
-               self.assemble(move_ins.src0)
+        return bytecode["move"] + \
+               self.assemble(move_ins.src0) + \
+               self.assemble(move_ins.dest)
 
     def visit_print_ins(self, print_ins: PrintIns):
-        return bytecode["print"] + self.assemble(print_ins.src0)
+        return bytecode["print"] + \
+               self.assemble(print_ins.src0)
 
     def visit_register(self, reg: Register):
         return pack("<B", reg.reg_num)

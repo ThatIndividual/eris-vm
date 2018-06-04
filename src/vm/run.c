@@ -29,19 +29,20 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 {
     #define AS_DISPATCH(x, y) &&do_ ## y,
     #define DISPATCH() goto *dispatch_table[*ip++]
-    #define R(x) (reg[(x)])
+    #define V(x) (cs[(x)])
     static void *dispatch_table[] = { INS_TABLE(AS_DISPATCH) };
 
     /* used for moving bytes in and out of registers */
-    uint32_t dest, src0, src1;
+    uint8_t src0, src1, dest;
     int8_t adrs;
+    uint32_t lit32;
 
     /*
      * properties of either EVM or Obj that are demarshalled
      * inside the run loop
      */
     uint8_t *ip = obj->ins + evm->ip;
-    uint32_t *reg = evm->reg;
+    uint32_t *cs = evm->cs;
 
     DISPATCH();
 
@@ -53,10 +54,10 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     #define ARITH_I32(op) \
         do { \
-            dest = *ip++; \
             src0 = *ip++; \
             src1 = *ip++; \
-            R(dest) = R(src0) op R(src1); \
+            dest = *ip++; \
+            V(dest) = V(src0) op V(src1); \
         } while(0)
 
     do_add_i32:
@@ -101,7 +102,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
             adrs = *ip++; \
             src0 = *ip++; \
             src1 = *ip++; \
-            if (R(src0) op R(src1)) \
+            if (V(src0) op V(src1)) \
                 ip += adrs; \
         } while(0);
 
@@ -135,7 +136,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
         do { \
             adrs = *ip++; \
             src0 = *ip++; \
-            if (R(src0) op 0) \
+            if (V(src0) op 0) \
                 ip += adrs; \
         } while(0);
 
@@ -166,20 +167,21 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #undef CMPZ_JMP
 
     do_cns_i32:
-        dest = *ip++;
-        R(dest) = *(uint32_t *)ip;
+        lit32 = *(uint32_t *)ip;
         ip += 4;
+        dest = *ip++;
+        V(dest) = lit32;
         DISPATCH();
 
     do_move:
-        dest = *ip++;
         src0 = *ip++;
-        R(dest) = R(src0);
+        dest = *ip++;
+        V(dest) = V(src0);
         DISPATCH();
 
     do_print:
         src0 = *ip++;
-        printf("%" PRIu32 "\n", R(src0));
+        printf("%" PRIu32 "\n", V(src0));
         DISPATCH();
 
     /* unimplemented */

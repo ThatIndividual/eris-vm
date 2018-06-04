@@ -1,11 +1,11 @@
 sub main(args=0, locs=4) do
-    i32 r0 1299827
-    i32 r1 2
-    i32 r3 1
+    i32 1299827 r0
+    i32 2 r1
+    i32 1 r3
 step:
-    mod r2 r0 r1
+    mod r0 r1 r2
     jeqz @end r2
-    add r1 r1 r3
+    add r1 r3 r1
     jmp @step
 end:
     print r1

@@ -5,11 +5,11 @@
 
 struct evm {
     uint32_t ip;
-    uint32_t *reg;
-    size_t reg_len;
+    uint32_t *cs;
+    size_t cs_len;
 };
 
 struct evm *Evm_new();
-void Evm_reg_grow(struct evm *evm);
+void Evm_cs_grow(struct evm *evm);
 
 #endif /* ERIS_EVM_H */

@@ -1,10 +1,10 @@
 sub main(args=0, locs=1) do
-    i32 r0 41
+    i32 41 r0
     print r0
 
-    i32 r0 42
+    i32 42 r0
     print r0
 
-    i32 r0 43
+    i32 43 r0
     print r0
 end
