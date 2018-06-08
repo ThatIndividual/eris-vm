@@ -42,7 +42,8 @@ class AssemblerError(Exception):
 
 class AssemblerVisitor(AbstractVisitor):
     def __init__(self):
-        self.sub_desciptions = []
+        self.sub_descriptions = []
+        self.current_sub = None
 
     def assemble(self, node):
         return node.accept(self)
@@ -57,12 +58,12 @@ class AssemblerVisitor(AbstractVisitor):
         ins_code = entry_code + b"\x00" + other_code
 
         sub_desc = b""
-        for sd in self.sub_desciptions:
+        for sd in self.sub_descriptions:
             sub_desc += pack("<I", sd[0]) + \
                         pack("<H", sd[1]) + \
                         pack("<H", sd[2])
 
-        sub_desc_size = pack("<I", len(self.sub_desciptions))
+        sub_desc_size = pack("<I", len(self.sub_descriptions))
         ins_size = pack("<I", len(ins_code))
 
         return header + maj_ver + min_ver + \
@@ -70,9 +71,10 @@ class AssemblerVisitor(AbstractVisitor):
                sub_desc + ins_code
 
     def visit_sub_stm(self, sub_stm: SubStm):
-        self.sub_desciptions.append((sub_stm.address,
-                                     int(sub_stm.args.i32_tok.lexeme),
-                                     int(sub_stm.locs.i32_tok.lexeme)))
+        self.current_sub = sub_stm
+        self.sub_descriptions.append((sub_stm.address,
+                                      int(sub_stm.args.i32_tok.lexeme),
+                                      int(sub_stm.locs.i32_tok.lexeme)))
         return b"".join([self.assemble(statement) for statement in sub_stm.instructions])
 
     def visit_halt_ins(self, hlt_ins: HaltIns):
@@ -200,7 +202,10 @@ class AssemblerVisitor(AbstractVisitor):
                self.assemble(print_ins.src0)
 
     def visit_register(self, reg: Register):
-        return pack("<B", reg.reg_num)
+        n = reg.reg_num
+        regs = int(self.current_sub.args.i32_tok.lexeme) + \
+               int(self.current_sub.locs.i32_tok.lexeme)
+        return pack("<B", regs - n)
 
     def visit_lit_i32(self, lit_i32: LitI32):
         return pack("<I", int(lit_i32.i32_tok.lexeme))

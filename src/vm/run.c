@@ -29,13 +29,14 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 {
     #define AS_DISPATCH(x, y) &&do_ ## y,
     #define DISPATCH() goto *dispatch_table[*ip++]
-    #define V(x) (cs[(x)])
+    #define V(x) (*(sp+(x)))
     static void *dispatch_table[] = { INS_TABLE(AS_DISPATCH) };
 
     /* used for moving bytes in and out of registers */
     uint8_t src0, src1, dest;
     int8_t adrs;
     uint32_t lit32;
+    struct sub_desc sub;
 
     /*
      * properties of either EVM or Obj that are demarshalled
@@ -43,6 +44,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
      */
     uint8_t *ip = obj->ins + evm->ip;
     uint32_t *cs = evm->cs;
+    uint32_t *sp = evm->cs + evm->sp;
 
     DISPATCH();
 
@@ -83,9 +85,9 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #undef ARITH_I32
 
     do_call:
-//        sub = *ip++;
-//        dest = *ip++;
 //        src0 = *ip++;
+//        src1 = *ip++;
+//        sub = obj->sub_desc[src0];
         DISPATCH();
 
     do_ret:

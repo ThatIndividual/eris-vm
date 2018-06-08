@@ -7,6 +7,7 @@ struct evm {
     uint32_t ip;
     uint32_t *cs;
     size_t cs_len;
+    uint32_t sp;
 };
 
 struct evm *Evm_new();
