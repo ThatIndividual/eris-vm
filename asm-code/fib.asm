@@ -8,4 +8,5 @@ step:
     move r2 r1
     move r3 r2
     jlt @step r3 r0
+    halt
 end

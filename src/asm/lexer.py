@@ -31,7 +31,8 @@ class Tok(Enum):
     DIV_INS = "TOK_DIV_INS"
     MOD_INS = "TOK_MOD_INS"
     CALL_INS = "TOK_CALL_INS"
-    RET_INS = "TOK_RET_INS"
+    RECEIVE_INS = "TOK_RECEIVE_INS"
+    RETURN_INS = "TOK_RETURN_INS"
 
     JMP_INS = "TOK_JMP_INS"
     JEQ_INS = "TOK_JEQ_INS"
@@ -70,7 +71,8 @@ keywords = {
     "mod": Tok.MOD_INS,
 
     "call": Tok.CALL_INS,
-    "ret": Tok.RET_INS,
+    "receive": Tok.RECEIVE_INS,
+    "return": Tok.RETURN_INS,
 
     "jmp": Tok.JMP_INS,
     "jeq": Tok.JEQ_INS,

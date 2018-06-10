@@ -88,8 +88,10 @@ class Parser:
 
         elif self.tok_matches(Tok.CALL_INS):
             return self.call_ins()
-        elif self.tok_matches(Tok.RET_INS):
-            return self.ret_ins()
+        elif self.tok_matches(Tok.RECEIVE_INS):
+            return self.receive_ins()
+        elif self.tok_matches(Tok.RETURN_INS):
+            return self.return_ins()
 
         elif self.tok_matches(Tok.JMP_INS):
             return self.jmp_ins()
@@ -167,17 +169,24 @@ class Parser:
         return ModIns(src0, src1, dest)
 
     def call_ins(self):
-        # call_ins -> ^CALL^ id register register
+        # call_ins -> ^CALL^ id register*
         self.tok_consume(Tok.ID, "Expected a subroutine name")
         id = self.prev_tok
-        src0 = self.register()
-        dest = self.register()
-        return CallIns(id, src0, dest)
+        src = []
+        while self.tok_is([Tok.ID]):
+            src.append(self.register())
+        return CallIns(id, src)
 
-    def ret_ins(self):
-        # ret_ins -> ^RET^ register
-        src0 = self.register()
-        return RetIns(src0)
+    def receive_ins(self):
+        # receive_ins -> ^RECEIVE^ register
+        return ReceiveIns(self.register())
+
+    def return_ins(self):
+        # return_ins -> ^RETURN^ register?
+        if self.tok_is([Tok.ID]):
+            return RetIns(self.register())
+        else:
+            return RetIns(None)
 
     def jmp_ins(self):
         # jmp_ins -> ^JMP^ at_location

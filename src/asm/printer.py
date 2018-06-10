@@ -65,13 +65,21 @@ class PrintVisitor(AbstractVisitor):
 
     @classmethod
     def visit_call_ins(cls, call_ins: CallIns):
-        return "    CALL {} {} {}".format(call_ins.id.lexeme,
-                                          cls.print(call_ins.src0),
-                                          cls.print(call_ins.dest))
+        call = "    CALL {}[{}] {}".format(call_ins.id.lexeme, call_ins.sub, len(call_ins.src))
+        for vreg in call_ins.src:
+            call += " {}".format(cls.print(vreg))
+        return call
+
+    @classmethod
+    def visit_receive_ins(cls, receive_ins: ReceiveIns):
+        return "    RECEIVE {}".format(cls.print(receive_ins.src))
 
     @classmethod
     def visit_ret_ins(cls, ret_ins: RetIns):
-        return "    RET {}".format(cls.print(ret_ins.src0))
+        if ret_ins.src0:
+            return "    RETURN {}".format(cls.print(ret_ins.src0))
+        else:
+            return "    RETURN"
 
     @classmethod
     def visit_jmp_ins(cls, jmp_ins: JmpIns):

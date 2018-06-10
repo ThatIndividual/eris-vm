@@ -16,7 +16,9 @@
     X(I32_TO_FLT, i32_to_flt) \
     X(FLT_TO_I32, flt_to_i32) \
     X(CALL, call) \
-    X(RET, ret) \
+    X(RECEIVE, receive) \
+    X(RETURN, return) \
+    X(RETURN_NIL, return_nil) \
     X(JMP, jmp) \
     X(JMP_EQ, jmp_eq) \
     X(JMP_NE, jmp_ne) \
@@ -42,7 +44,7 @@
 #define AS_BARE(x, y) x ,
 #define AS_STR(x, y) #y ,
 
-enum ins { INS_TABLE(AS_BARE) NUM_INS};
+enum ins { INS_TABLE(AS_BARE) NUM_INS };
 char *ins_label[] = { INS_TABLE(AS_STR) };
 
 #undef AS_STR

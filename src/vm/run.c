@@ -11,7 +11,7 @@ void Evm_run_Obj(struct evm*, struct obj*);
 int main(int argc, char *argv[])
 {
 //     int i;
-//     for (i = 0; i < __N_INS; i++) {
+//     for (i = 0; i < NUM_INS; i++) {
 //         printf("\"%s\": b\"\\x%02X\",\n", ins_label[i], i);
 //     }
 
@@ -27,24 +27,22 @@ int main(int argc, char *argv[])
 
 void Evm_run_Obj(struct evm *evm, struct obj *obj)
 {
+    #define P_STACK() printf("SP %p\nFP %p\n", sp, fp); for (uint32_t* pp = sp; pp != evm->exec_stack_start; pp++) printf("%p %" PRIu32 "\n", pp, *pp)
+    #define P_INS() printf("[%s]\n", ins_label[*(ip)])
+
     #define AS_DISPATCH(x, y) &&do_ ## y,
     #define DISPATCH() goto *dispatch_table[*ip++]
-    #define V(x) (*(sp+(x)))
+    #define V(x) (*(fp+(x)))
     static void *dispatch_table[] = { INS_TABLE(AS_DISPATCH) };
 
-    /* used for moving bytes in and out of registers */
-    uint8_t src0, src1, dest;
+    uint8_t src0, src1, dest, ret;
     int8_t adrs;
-    uint32_t lit32;
+    uint32_t lit_u32;
     struct sub_desc sub;
 
-    /*
-     * properties of either EVM or Obj that are demarshalled
-     * inside the run loop
-     */
     uint8_t *ip = obj->ins + evm->ip;
-    uint32_t *cs = evm->cs;
-    uint32_t *sp = evm->cs + evm->sp;
+    uint32_t *sp = evm->sp;
+    uint32_t *fp = evm->fp;
 
     DISPATCH();
 
@@ -85,13 +83,39 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #undef ARITH_I32
 
     do_call:
-//        src0 = *ip++;
-//        src1 = *ip++;
-//        sub = obj->sub_desc[src0];
+        src0 = *ip++; // sub index
+        src1 = *ip++; // number of arguments
+        sub = obj->subs[src0];
+
+        for (; src1 != 0; src1--) {
+            dest = V(*ip++);
+            *--sp = dest;
+        }
+
+        sp -= sub.locs;
+
+        *--sp = ip-obj->ins;
+        *--sp = evm->exec_stack_start - fp;
+
+        fp = sp + 2;
+        ip = obj->ins + sub.address;
         DISPATCH();
 
-    do_ret:
-//        src0 = *ip++;
+    do_receive:
+        src0 = *ip++;
+        V(src0) = ret;
+        DISPATCH();
+
+    do_return:
+        src0 = *ip++;
+        ret = V(src0);
+        /* FALLTHROUGH */
+
+    do_return_nil:
+        fp = evm->exec_stack_start - *sp++;
+
+        ip = obj->ins + *sp++;
+        sp = fp - 2;
         DISPATCH();
 
     do_jmp:
@@ -169,10 +193,10 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #undef CMPZ_JMP
 
     do_cns_i32:
-        lit32 = *(uint32_t *)ip;
+        lit_u32 = *(uint32_t *)ip;
         ip += 4;
         dest = *ip++;
-        V(dest) = lit32;
+        V(dest) = lit_u32;
         DISPATCH();
 
     do_move:
@@ -192,7 +216,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     do_cns_chr: do_cns_flt: do_cns_str: do_load_glb: do_store_glb:
         return;
 
-    #undef R
+    #undef V
     #undef DISPATCH
     #undef AS_DISPATCH
 }

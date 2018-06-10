@@ -7,4 +7,6 @@ sub main(args=0, locs=1) do
 
     i32 43 r0
     print r0
+
+    halt
 end

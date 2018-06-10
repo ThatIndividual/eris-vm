@@ -49,6 +49,10 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
+    def visit_receive_ins(self, receive_ins: ReceiveIns):
+        pass
+
+    @abstractmethod
     def visit_ret_ins(self, ret_ins: RetIns):
         pass
 

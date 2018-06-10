@@ -1,6 +1,6 @@
 ASM = ./src/asm/asm.py
 
-ASSEMBLY = arith fib gcd isPrime loop print42
+ASSEMBLY = arith fib gcd isPrime loop print42 subs
 AUR_TRG = $(addprefix aur-code/, $(addsuffix .aur, $(ASSEMBLY)))
 VM_SRC = $(addprefix src/vm/, run.c evm.c obj.c)
 

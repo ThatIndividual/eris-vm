@@ -87,10 +87,17 @@ class ResolverVisitor(AbstractVisitor):
         self.local_addr += 4
 
     def visit_call_ins(self, call_ins: CallIns):
-        self.local_addr += 4
+        self.local_addr += (3 + len(call_ins.src))
+        self.unresolved_calls.append(call_ins)
+
+    def visit_receive_ins(self, receive_ins: ReceiveIns):
+        self.local_addr += 2
 
     def visit_ret_ins(self, ret_ins: RetIns):
-        self.local_addr += 2
+        if ret_ins.src0:
+            self.local_addr += 2
+        else:
+            self.local_addr += 1
 
     def visit_jmp_ins(self, jmp_ins: JmpIns):
         self.local_addr += 2

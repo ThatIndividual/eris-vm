@@ -10,4 +10,6 @@ sub main(args=0, locs=3) do
     print r2
     div r0 r1 r2
     print r2
+
+    halt
 end

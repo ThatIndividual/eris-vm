@@ -1,11 +1,20 @@
-sub main(args=0, locs=2) do
+sub main(args=0, locs=1) do
     i32 10 r0
-    i32 5 r1
-    call rectArea r0 r0
+    call quad r0
+    receive r0
     print r0
+    halt
 end
 
-sub rectArea(args=2, locs=1) do
-    mul r0 r1 r2
-    ret r2
+sub quad(args=1, locs=0) do
+    call double r0
+    receive r0
+    call double r0
+    receive r0
+    return r0
+end
+
+sub double(args=1, locs=0) do
+    add r0 r0 r0
+    return r0
 end

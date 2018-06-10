@@ -5,4 +5,6 @@ step:
     print r0
     sub r0 r1 r0
     jgtz @step r0
+
+    halt
 end

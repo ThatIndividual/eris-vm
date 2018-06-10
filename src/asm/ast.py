@@ -88,14 +88,21 @@ class ModIns:
 
 
 class CallIns:
-    def __init__(self, id, src0, dest):
+    def __init__(self, id, src):
         self.id = id
         self.sub = None
-        self.src0 = src0
-        self.dest = dest
+        self.src = src
 
     def accept(self, visitor):
         return visitor.visit_call_ins(self)
+
+
+class ReceiveIns:
+    def __init__(self, src):
+        self.src = src
+
+    def accept(self, visitor):
+        return visitor.visit_receive_ins(self)
 
 
 class RetIns:
