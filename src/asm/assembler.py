@@ -230,7 +230,7 @@ class AssemblerVisitor(AbstractVisitor):
         return pack("<B", regs - n)
 
     def visit_lit_i32(self, lit_i32: LitI32):
-        return pack("<I", int(lit_i32.i32_tok.lexeme))
+        return pack("<i", int(lit_i32.i32_tok.lexeme))
 
     def visit_label(self, label: Label):
         return b""

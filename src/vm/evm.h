@@ -5,11 +5,11 @@
 
 struct evm {
     uint32_t ip;
-    uint32_t *exec_stack;
-    uint32_t *exec_stack_start;
+    int32_t *exec_stack;
+    int32_t *exec_stack_start;
     size_t exec_stack_cap;
-    uint32_t *sp;
-    uint32_t *fp;
+    int32_t *sp;
+    int32_t *fp;
 };
 
 struct evm *Evm_new();

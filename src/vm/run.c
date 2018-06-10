@@ -35,13 +35,14 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #define V(x) (*(fp+(x)))
     static void *dispatch_table[] = { INS_TABLE(AS_DISPATCH) };
 
-    uint8_t src0, src1, dest, ret;
+    uint8_t src0, src1, dest;
+    int32_t ret;
     int8_t adrs;
     struct sub_desc sub;
 
     uint8_t *ip = obj->ins + evm->ip;
-    uint32_t *sp = evm->sp;
-    uint32_t *fp = evm->fp;
+    int32_t *sp = evm->sp;
+    int32_t *fp = evm->fp;
 
     DISPATCH();
 
@@ -192,7 +193,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #undef CMPZ_JMP
 
     do_cns_i32:
-        V(*(ip+4)) = *(uint32_t *)ip;
+        V(*(ip+4)) = *(int32_t *)ip;
         ip += 5;
         DISPATCH();
 
