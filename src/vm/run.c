@@ -37,7 +37,6 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     uint8_t src0, src1, dest, ret;
     int8_t adrs;
-    uint32_t lit_u32;
     struct sub_desc sub;
 
     uint8_t *ip = obj->ins + evm->ip;
@@ -193,10 +192,8 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #undef CMPZ_JMP
 
     do_cns_i32:
-        lit_u32 = *(uint32_t *)ip;
-        ip += 4;
-        dest = *ip++;
-        V(dest) = lit_u32;
+        V(*(ip+4)) = *(uint32_t *)ip;
+        ip += 5;
         DISPATCH();
 
     do_move:
@@ -207,7 +204,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     do_print:
         src0 = *ip++;
-        printf("%" PRIu32 "\n", V(src0));
+        printf("%" PRIi32 "\n", V(src0));
         DISPATCH();
 
     /* unimplemented */
