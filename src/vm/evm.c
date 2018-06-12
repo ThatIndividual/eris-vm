@@ -13,13 +13,14 @@ struct evm *Evm_new()
     evm->exec_stack = malloc(evm->exec_stack_cap);
     if (evm->exec_stack) {
         evm->exec_stack_start = evm->exec_stack + evm->exec_stack_cap;
-        evm->sp = evm->exec_stack_start - 7;
-        evm->fp = evm->exec_stack_start - 5;
+        // Move the fp and sp 5 and 7 registers in
+        evm->sp = evm->exec_stack_start - (7 * 4);
+        evm->fp = evm->exec_stack_start - (5 * 4);
 
         return evm;
     }
     else {
-        puts("could not allocate 1MB");
+        puts("Could not allocate stack");
         exit(0);
     }
 }

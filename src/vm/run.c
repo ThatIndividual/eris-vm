@@ -20,8 +20,6 @@ int main(int argc, char *argv[])
         struct obj *obj = Obj_read(argv[1]);
         struct evm *evm = Evm_new(obj);
 
-        puts("read object");
-
         Evm_run_Obj(evm, obj);
     }
 
@@ -34,11 +32,9 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #define P_INS() printf("[%s]\n", ins_label[*(ip)])
 
     #define AS_DISPATCH(x, y) &&do_ ## y,
-    #define DISPATCH() printf("[%s]\n", ins_label[*ip]); goto *dispatch_table[*ip++]
+    #define DISPATCH() goto *dispatch_table[*ip++]
     #define VREG(x) (*(EVal *)(fp+((x)*4)))
     static void *dispatch_table[] = { INS_TABLE(AS_DISPATCH) };
-
-    puts("entered run");
 
     uint32_t calls = 0;
 
@@ -50,8 +46,6 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     uint8_t *ip = obj->ins + evm->ip;
     void *sp = evm->sp;
     void *fp = evm->fp;
-
-    printf("Before first dispatch, INS %p, IP %p\n", obj->ins, ip);
 
     DISPATCH();
 
