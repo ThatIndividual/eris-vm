@@ -1,13 +1,16 @@
-ASM = ./src/asm/asm.py
+CC = gcc-8
+CFLAGS = --debug -fno-strict-aliasing
 
-ASSEMBLY = arith fac_rec fib gcd isPrime loop print42 subs
-AUR_TRG = $(addprefix aur-code/, $(addsuffix .aur, $(ASSEMBLY)))
+ASSEMBLER = ./src/asm/asm.py
+
+CODE = arith fac_rec fib fib_rec gcd isPrime loop print42 subs
+AUR_TRG = $(addprefix aur-code/, $(addsuffix .aur, $(CODE)))
 VM_SRC = $(addprefix src/vm/, run.c evm.c obj.c)
 
 default : eris $(AUR_TRG)
 
 eris : $(VM_SRC)
-	gcc $(VM_SRC) -O3 -o eris
+	$(CC) $(VM_SRC) $(CFLAGS) -o eris
 
 aur-code/%.aur : asm-code/%.asm
-	$(ASM) $< $@
+	$(ASSEMBLER) $< $@
