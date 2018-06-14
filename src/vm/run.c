@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <inttypes.h>
 
+#include "common.h"
 #include "evm.h"
 #include "obj.h"
 #include "ins.h"
@@ -28,12 +28,9 @@ int main(int argc, char *argv[])
 
 void Evm_run_Obj(struct evm *evm, struct obj *obj)
 {
-    #define P_STACK() printf("SP %p\nFP %p\n", sp, fp); for (uint32_t* pp = sp; pp != evm->exec_stack_start; pp++) printf("%p %" PRIu32 "\n", pp, *pp)
-    #define P_INS() printf("[%s]\n", ins_label[*(ip)])
-
     #define AS_DISPATCH(x, y) &&do_ ## y,
     #define DISPATCH() goto *dispatch_table[*ip++]
-    #define VREG(x) (*(EVal *)(fp+((x)*4)))
+    #define VREG(x) (*(EVal *)(fp+((x)*VREG_SIZE)))
     static void *dispatch_table[] = { INS_TABLE(AS_DISPATCH) };
 
     uint32_t calls = 0;
@@ -56,35 +53,59 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     do_noop:
         DISPATCH();
 
-    #define ARITH_I32(op) \
+    #define ARITH(op, type) \
         do { \
             src0 = *ip++; \
             src1 = *ip++; \
             dest = *ip++; \
-            VREG(dest).i = VREG(src0).i op VREG(src1).i; \
+            VREG(dest).type = VREG(src0).type op VREG(src1).type; \
         } while(0)
 
     do_add_i32:
-        ARITH_I32(+);
+        ARITH(+, i);
         DISPATCH();
 
     do_sub_i32:
-        ARITH_I32(-);
+        ARITH(-, i);
         DISPATCH();
 
     do_mul_i32:
-        ARITH_I32(*);
+        ARITH(*, i);
         DISPATCH();
 
     do_div_i32:
-        ARITH_I32(/);
+        ARITH(/, i);
         DISPATCH();
 
     do_mod_i32:
-        ARITH_I32(%);
+        ARITH(%, i);
         DISPATCH();
 
-    #undef ARITH_I32
+    do_add_flt:
+        ARITH(+, f);
+        DISPATCH();
+
+    do_sub_flt:
+        ARITH(-, f);
+        DISPATCH();
+
+    do_mul_flt:
+        ARITH(*, f);
+        DISPATCH();
+
+    do_div_flt:
+        ARITH(/, f);
+        DISPATCH();
+
+    #undef ARITH
+
+    do_i32_to_flt:
+        src0 = *ip++;
+        dest = *ip++;
+        VREG(dest).f = (flt)VREG(src0).i;
+
+    do_flt_to_i32:
+        return;
 
     do_call:
         calls++;
@@ -94,15 +115,15 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
         for (; src1 != 0; src1--) {
             ret = VREG(*ip++);
-            ((EVal *)(sp -= 4))->i = ret.i;
+            ((EVal *)(sp -= VREG_SIZE))->i = ret.i;
         }
 
-        sp -= (sub.locs * 4);
+        sp -= (sub.locs * VREG_SIZE);
 
-        ((EVal *)(sp -= 4))->i = ip-obj->ins;
-        ((EVal *)(sp -= 4))->i = evm->exec_stack_start - fp;
+        ((EVal *)(sp -= VREG_SIZE))->i = ip-obj->ins;
+        ((EVal *)(sp -= VREG_SIZE))->i = evm->exec_stack_start - fp;
 
-        fp = sp + (2 * 4);
+        fp = sp + (2 * VREG_SIZE);
         ip = obj->ins + sub.address;
         DISPATCH();
 
@@ -118,12 +139,12 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     do_return_nil:
         fp = evm->exec_stack_start - ((EVal *)sp)->i;
-        sp += 4;
+        sp += VREG_SIZE;
 
         ip = obj->ins + ((EVal *)sp)->i;
-        sp += 4;
+        sp += VREG_SIZE;
 
-        sp = fp - (2 * 4);
+        sp = fp - (2 * VREG_SIZE);
         DISPATCH();
 
     do_jmp:
@@ -217,8 +238,6 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
         DISPATCH();
 
     /* unimplemented */
-    do_add_flt: do_sub_flt: do_mul_flt: do_div_flt:
-    do_i32_to_flt: do_flt_to_i32:
     do_cns_chr: do_cns_flt: do_cns_str: do_load_glb: do_store_glb:
         return;
 

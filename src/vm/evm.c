@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <inttypes.h>
 
+#include "common.h"
 #include "evm.h"
 
 struct evm *Evm_new()
@@ -14,8 +14,8 @@ struct evm *Evm_new()
     if (evm->exec_stack) {
         evm->exec_stack_start = evm->exec_stack + evm->exec_stack_cap;
         // Move the fp and sp 5 and 7 registers in
-        evm->sp = evm->exec_stack_start - (7 * 4);
-        evm->fp = evm->exec_stack_start - (5 * 4);
+        evm->sp = evm->exec_stack_start - (7 * VREG_SIZE);
+        evm->fp = evm->exec_stack_start - (5 * VREG_SIZE);
 
         return evm;
     }

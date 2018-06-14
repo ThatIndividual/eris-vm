@@ -1,4 +1,4 @@
-CC = gcc-6
+CC = gcc-8
 CFLAGS = -O3 -fno-strict-aliasing
 
 ASSEMBLER = ./src/asm/asm.py
