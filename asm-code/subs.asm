@@ -15,6 +15,6 @@ sub quad(args=1, locs=0) do
 end
 
 sub double(args=1, locs=0) do
-    add r0 r0 r0
+    add.i32 r0 r0 r0
     return r0
 end

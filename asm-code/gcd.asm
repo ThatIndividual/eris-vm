@@ -5,7 +5,7 @@ step:
     jeqz @end r1
     move r0 r2
     move r1 r0
-    mod r2 r1 r1
+    mod.i32 r2 r1 r1
     jmp @step
 end:
     print r0

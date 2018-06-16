@@ -34,34 +34,68 @@ class PrintVisitor(AbstractVisitor):
                                       cls.print(cns_i32_ins.dest))
 
     @classmethod
-    def visit_add_ins(cls, add_stm: AddIns):
-        return "    ADD {} {} {}".format(cls.print(add_stm.src0),
-                                         cls.print(add_stm.src1),
-                                         cls.print(add_stm.dest))
+    def visit_add_i32_ins(cls, add_stm: AddI32Ins):
+        return "    ADD.I32 {} {} {}".format(cls.print(add_stm.src0),
+                                             cls.print(add_stm.src1),
+                                             cls.print(add_stm.dest))
 
     @classmethod
-    def visit_sub_ins(cls, sub_stm: SubIns):
-        return "    SBT {} {} {}".format(cls.print(sub_stm.src0),
-                                         cls.print(sub_stm.src1),
-                                         cls.print(sub_stm.dest))
+    def visit_sub_i32_ins(cls, sub_stm: SubI32Ins):
+        return "    SUB.I32 {} {} {}".format(cls.print(sub_stm.src0),
+                                             cls.print(sub_stm.src1),
+                                             cls.print(sub_stm.dest))
 
     @classmethod
-    def visit_mul_ins(cls, mul_stm: MulIns):
-        return "    MUL {} {} {}".format(cls.print(mul_stm.src0),
-                                         cls.print(mul_stm.src1),
-                                         cls.print(mul_stm.dest))
+    def visit_mul_i32_ins(cls, mul_stm: MulI32Ins):
+        return "    MUL.I32 {} {} {}".format(cls.print(mul_stm.src0),
+                                             cls.print(mul_stm.src1),
+                                             cls.print(mul_stm.dest))
 
     @classmethod
-    def visit_div_ins(cls, div_stm: DivIns):
-        return "    DIV {} {} {}".format(cls.print(div_stm.src0),
-                                         cls.print(div_stm.src1),
-                                         cls.print(div_stm.dest))
+    def visit_div_i32_ins(cls, div_stm: DivI32Ins):
+        return "    DIV.I32 {} {} {}".format(cls.print(div_stm.src0),
+                                             cls.print(div_stm.src1),
+                                             cls.print(div_stm.dest))
 
     @classmethod
-    def visit_mod_ins(cls, mod_ins: ModIns):
-        return "    MOD {} {} {}".format(cls.print(mod_ins.src0),
-                                         cls.print(mod_ins.src1),
-                                         cls.print(mod_ins.dest))
+    def visit_mod_i32_ins(cls, mod_ins: ModI32Ins):
+        return "    MOD.I32 {} {} {}".format(cls.print(mod_ins.src0),
+                                             cls.print(mod_ins.src1),
+                                             cls.print(mod_ins.dest))
+
+    @classmethod
+    def visit_add_flt_ins(cls, add_ins: AddFltIns):
+        return "    ADD.I32 {} {} {}".format(cls.print(add_ins.src0),
+                                             cls.print(add_ins.src1),
+                                             cls.print(add_ins.dest))
+
+    @classmethod
+    def visit_sub_flt_ins(cls, sub_ins: SubFltIns):
+        return "    SUB.I32 {} {} {}".format(cls.print(sub_ins.src0),
+                                             cls.print(sub_ins.src1),
+                                             cls.print(sub_ins.dest))
+
+    @classmethod
+    def visit_mul_flt_ins(cls, mul_ins: MulFltIns):
+        return "    MUL.I32 {} {} {}".format(cls.print(mul_ins.src0),
+                                             cls.print(mul_ins.src1),
+                                             cls.print(mul_ins.dest))
+
+    @classmethod
+    def visit_div_flt_ins(cls, div_ins: DivFltIns):
+        return "    DIV.I32 {} {} {}".format(cls.print(div_ins.src0),
+                                             cls.print(div_ins.src1),
+                                             cls.print(div_ins.dest))
+
+    @classmethod
+    def visit_i32_flt_ins(cls, i32_flt: I32FltIns):
+        return "    I32.FLT {} {}".format(cls.print(i32_flt.src0),
+                                          cls.print(i32_flt.dest))
+
+    @classmethod
+    def visit_flt_i32_ins(cls, flt_i32: FltI32Ins):
+        return "    FLT.I32 {} {}".format(cls.print(flt_i32.src0),
+                                          cls.print(flt_i32.dest))
 
     @classmethod
     def visit_call_ins(cls, call_ins: CallIns):
@@ -124,32 +158,32 @@ class PrintVisitor(AbstractVisitor):
     @classmethod
     def visit_jeqz_ins(cls, jeqz_ins: JeqzIns):
         return "    JGEZ {} {}".format(cls.print(jeqz_ins.at_location),
-                                          cls.print(jeqz_ins.src0))
+                                       cls.print(jeqz_ins.src0))
 
     @classmethod
     def visit_jnez_ins(cls, jnez_ins: JnezIns):
         return "    JNEZ {} {}".format(cls.print(jnez_ins.at_location),
-                                          cls.print(jnez_ins.src0))
+                                       cls.print(jnez_ins.src0))
 
     @classmethod
     def visit_jltz_ins(cls, jltz_ins: JltzIns):
         return "    JLTZ {} {}".format(cls.print(jltz_ins.at_location),
-                                          cls.print(jltz_ins.src0))
+                                       cls.print(jltz_ins.src0))
 
     @classmethod
     def visit_jlez_ins(cls, jlez_ins: JlezIns):
         return "    JLEZ {} {}".format(cls.print(jlez_ins.at_location),
-                                          cls.print(jlez_ins.src0))
+                                       cls.print(jlez_ins.src0))
 
     @classmethod
     def visit_jgtz_ins(cls, jgtz_ins: JgtzIns):
         return "    JGTZ {} {}".format(cls.print(jgtz_ins.at_location),
-                                          cls.print(jgtz_ins.src0))
+                                       cls.print(jgtz_ins.src0))
 
     @classmethod
     def visit_jgez_ins(cls, jgez_ins: JgezIns):
         return "    JGEZ {} {}".format(cls.print(jgez_ins.at_location),
-                                          cls.print(jgez_ins.src0))
+                                       cls.print(jgez_ins.src0))
 
     @classmethod
     def visit_move_ins(cls, move_ins: MoveIns):

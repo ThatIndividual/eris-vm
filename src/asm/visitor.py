@@ -25,23 +25,47 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
-    def visit_add_ins(self, add_ins: AddIns):
+    def visit_add_i32_ins(self, add_ins: AddI32Ins):
         pass
 
     @abstractmethod
-    def visit_sub_ins(self, sub_ins: SubIns):
+    def visit_sub_i32_ins(self, sub_ins: SubI32Ins):
         pass
 
     @abstractmethod
-    def visit_mul_ins(self, mul_ins: MulIns):
+    def visit_mul_i32_ins(self, mul_ins: MulI32Ins):
         pass
 
     @abstractmethod
-    def visit_div_ins(self, div_ins: DivIns):
+    def visit_div_i32_ins(self, div_ins: DivI32Ins):
         pass
 
     @abstractmethod
-    def visit_mod_ins(self, mod_ins: ModIns):
+    def visit_mod_i32_ins(self, mod_ins: ModI32Ins):
+        pass
+
+    @abstractmethod
+    def visit_add_flt_ins(self, add_ins: AddFltIns):
+        pass
+
+    @abstractmethod
+    def visit_sub_flt_ins(self, sub_ins: SubFltIns):
+        pass
+
+    @abstractmethod
+    def visit_mul_flt_ins(self, mul_ins: MulFltIns):
+        pass
+
+    @abstractmethod
+    def visit_div_flt_ins(self, div_ins: DivFltIns):
+        pass
+
+    @abstractmethod
+    def visit_i32_flt_ins(self, i32_flt: I32FltIns):
+        pass
+
+    @abstractmethod
+    def visit_flt_i32_ins(self, flt_i32: FltI32Ins):
         pass
 
     @abstractmethod

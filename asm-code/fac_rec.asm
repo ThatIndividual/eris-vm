@@ -7,7 +7,7 @@ loop:
     call fac r0
     receive r3
     print r3
-    add r0 r1 r0
+    add.i32 r0 r1 r0
     jlt @loop r0 r2
     halt
 end
@@ -17,10 +17,10 @@ sub fac(args=1, locs=3) do
     i32 1 r2
 
     jlt @trivial r0 r1
-    sub r0 r2 r3
+    sub.i32 r0 r2 r3
     call fac r3
     receive r3
-    mul r0 r3 r3
+    mul.i32 r0 r3 r3
     return r3
 trivial:
     return r2

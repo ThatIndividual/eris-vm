@@ -58,16 +58,6 @@ class Parser:
         return SubStm(id, ins, args, locs)
 
     def ins(self):
-        # instructions
-        #   -> halt_ins | noop_ins |
-        #    | i32_ins
-        #    | add_ins | sub_ins | mul_ins | div_ins | mod_ins
-        #    | call_ins | ret_ins
-        #    | jmp_ins
-        #    | jeq_ins | jne_ins | jlt_ins | jle_ins | jgt_ins | jge_ins
-        #    | jeqz_ins | jnez_ins | jltz_ins | jlez_ins | jgtz_ins | jgez_ins
-        #    | move_ins
-        #    | print_ins
         if self.tok_matches(Tok.HALT_INS):
             return HaltIns()
         elif self.tok_matches(Tok.NOOP_INS):
@@ -75,16 +65,30 @@ class Parser:
         elif self.tok_matches(Tok.I32_INS):
             return self.i32_ins()
 
-        elif self.tok_matches(Tok.ADD_INS):
-            return self.add_ins()
-        elif self.tok_matches(Tok.SUB):
-            return self.sub_ins()
-        elif self.tok_matches(Tok.MUL_INS):
-            return self.mul_ins()
-        elif self.tok_matches(Tok.DIV_INS):
-            return self.div_ins()
-        elif self.tok_matches(Tok.MOD_INS):
-            return self.mod_ins()
+        elif self.tok_matches(Tok.ADD_I32_INS):
+            return self.add_i32_ins()
+        elif self.tok_matches(Tok.SUB_I32_INS):
+            return self.sub_i32_ins()
+        elif self.tok_matches(Tok.MUL_I32_INS):
+            return self.mul_i32_ins()
+        elif self.tok_matches(Tok.DIV_I32_INS):
+            return self.div_i32_ins()
+        elif self.tok_matches(Tok.MOD_I32_INS):
+            return self.mod_i32_ins()
+
+        elif self.tok_matches(Tok.ADD_FLT_INS):
+            return self.add_flt_ins()
+        elif self.tok_matches(Tok.SUB_FLT_INS):
+            return self.sub_flt_ins()
+        elif self.tok_matches(Tok.MUL_FLT_INS):
+            return self.mul_flt_ins()
+        elif self.tok_matches(Tok.DIV_FLT_INS):
+            return self.div_flt_ins()
+
+        elif self.tok_matches(Tok.I32_FLT_INS):
+            return self.i32_flt_ins()
+        elif self.tok_matches(Tok.FLT_I32_INS):
+            return self.flt_i32_ins()
 
         elif self.tok_matches(Tok.CALL_INS):
             return self.call_ins()
@@ -133,40 +137,80 @@ class Parser:
         dest = self.register()
         return CnsI32Ins(lit, dest)
 
-    def add_ins(self):
-        # add_ins -> ^ADD^ register register register
+    def add_i32_ins(self):
+        # add_i32_ins -> ^ADD^ register register register
         src0 = self.register()
         src1 = self.register()
         dest = self.register()
-        return AddIns(src0, src1, dest)
+        return AddI32Ins(src0, src1, dest)
 
-    def sub_ins(self):
-        # sub_ins -> ^SUB^ register register register
+    def sub_i32_ins(self):
+        # sub_i32_ins -> ^SUB^ register register register
         src0 = self.register()
         src1 = self.register()
         dest = self.register()
-        return SubIns(src0, src1, dest)
+        return SubI32Ins(src0, src1, dest)
 
-    def mul_ins(self):
-        # mul_ins -> ^MUL^ register register register
+    def mul_i32_ins(self):
+        # mul_i32_ins -> ^MUL^ register register register
         src0 = self.register()
         src1 = self.register()
         dest = self.register()
-        return MulIns(src0, src1, dest)
+        return MulI32Ins(src0, src1, dest)
 
-    def div_ins(self):
-        # div_ins -> ^DIV^ register register register
+    def div_i32_ins(self):
+        # div_i32_ins -> ^DIV^ register register register
         src0 = self.register()
         src1 = self.register()
         dest = self.register()
-        return DivIns(src0, src1, dest)
+        return DivI32Ins(src0, src1, dest)
 
-    def mod_ins(self):
-        # mod_ins -> ^MOD^ register register register
+    def mod_i32_ins(self):
+        # mod_i32_ins -> ^MOD^ register register register
         src0 = self.register()
         src1 = self.register()
         dest = self.register()
-        return ModIns(src0, src1, dest)
+        return ModI32Ins(src0, src1, dest)
+
+    def add_flt_ins(self):
+        # add_flt_ins -> ^ADD^ register register register
+        src0 = self.register()
+        src1 = self.register()
+        dest = self.register()
+        return AddFltIns(src0, src1, dest)
+
+    def sub_flt_ins(self):
+        # sub_flt_ins -> ^SUB^ register register register
+        src0 = self.register()
+        src1 = self.register()
+        dest = self.register()
+        return SubFltIns(src0, src1, dest)
+
+    def mul_flt_ins(self):
+        # mul_i32_ins -> ^MUL^ register register register
+        src0 = self.register()
+        src1 = self.register()
+        dest = self.register()
+        return MulFltIns(src0, src1, dest)
+
+    def div_flt_ins(self):
+        # div_i32_ins -> ^DIV^ register register register
+        src0 = self.register()
+        src1 = self.register()
+        dest = self.register()
+        return DivFltIns(src0, src1, dest)
+
+    def i32_flt_ins(self):
+        # i32_flt_ins -> ^I32.FLT^ register register
+        src0 = self.register()
+        dest = self.register()
+        return I32FltIns(src0, dest)
+
+    def flt_i32_ins(self):
+        # flt_i32_ins -> ^FLT.I32^ register register
+        src0 = self.register()
+        dest = self.register()
+        return FltI32Ins(src0, dest)
 
     def call_ins(self):
         # call_ins -> ^CALL^ id register*

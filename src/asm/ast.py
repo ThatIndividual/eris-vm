@@ -37,54 +37,112 @@ class CnsI32Ins:
         return visitor.visit_cns_i32_ins(self)
 
 
-class AddIns:
+class AddI32Ins:
     def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
         self.dest = dest
 
     def accept(self, visitor):
-        return visitor.visit_add_ins(self)
+        return visitor.visit_add_i32_ins(self)
 
 
-class SubIns:
+class SubI32Ins:
     def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
         self.dest = dest
 
     def accept(self, visitor):
-        return visitor.visit_sub_ins(self)
+        return visitor.visit_sub_i32_ins(self)
 
 
-class MulIns:
+class MulI32Ins:
     def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
         self.dest = dest
 
     def accept(self, visitor):
-        return visitor.visit_mul_ins(self)
+        return visitor.visit_mul_i32_ins(self)
 
 
-class DivIns:
+class DivI32Ins:
     def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
         self.dest = dest
 
     def accept(self, visitor):
-        return visitor.visit_div_ins(self)
+        return visitor.visit_div_i32_ins(self)
 
 
-class ModIns:
+class ModI32Ins:
     def __init__(self, src0, src1, dest):
         self.src0 = src0
         self.src1 = src1
         self.dest = dest
 
     def accept(self, visitor):
-        return visitor.visit_mod_ins(self)
+        return visitor.visit_mod_i32_ins(self)
+
+
+class AddFltIns:
+    def __init__(self, src0, src1, dest):
+        self.src0 = src0
+        self.src1 = src1
+        self.dest = dest
+
+    def accept(self, visitor):
+        return visitor.visit_add_flt_ins(self)
+
+
+class SubFltIns:
+    def __init__(self, src0, src1, dest):
+        self.src0 = src0
+        self.src1 = src1
+        self.dest = dest
+
+    def accept(self, visitor):
+        return visitor.visit_sub_flt_ins(self)
+
+
+class MulFltIns:
+    def __init__(self, src0, src1, dest):
+        self.src0 = src0
+        self.src1 = src1
+        self.dest = dest
+
+    def accept(self, visitor):
+        return visitor.visit_mul_flt_ins(self)
+
+
+class DivFltIns:
+    def __init__(self, src0, src1, dest):
+        self.src0 = src0
+        self.src1 = src1
+        self.dest = dest
+
+    def accept(self, visitor):
+        return visitor.visit_div_flt_ins(self)
+
+
+class I32FltIns:
+    def __init__(self, src0, dest):
+        self.src0 = src0
+        self.dest = dest
+
+    def accept(self, visitor):
+        return visitor.visit_i32_flt_ins(self)
+
+
+class FltI32Ins:
+    def __init__(self, src0, dest):
+        self.src0 = src0
+        self.dest = dest
+
+    def accept(self, visitor):
+        return visitor.visit_flt_i32_ins(self)
 
 
 class CallIns:

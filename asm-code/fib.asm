@@ -3,7 +3,7 @@ sub main(args=0, locs=4) do
     i32 0 r1
     i32 1 r2
 step:
-    add r1 r2 r3
+    add.i32 r1 r2 r3
     print r3
     move r2 r1
     move r3 r2

@@ -25,11 +25,20 @@ class Tok(Enum):
     NOOP_INS = "TOK_NOOP_INS"
 
     I32_INS = "TOK_I32_INS"
-    ADD_INS = "TOK_ADD_INS"
-    # SUB_INS = "TOK_SUB"
-    MUL_INS = "TOK_MUL_INS"
-    DIV_INS = "TOK_DIV_INS"
-    MOD_INS = "TOK_MOD_INS"
+    ADD_I32_INS = "TOK_I32_ADD_INS"
+    SUB_I32_INS = "TOK_I32_SUB_INS"
+    MUL_I32_INS = "TOK_I32_MUL_INS"
+    DIV_I32_INS = "TOK_I32_DIV_INS"
+    MOD_I32_INS = "TOK_I32_MOD_INS"
+
+    ADD_FLT_INS = "TOK_FLT_ADD_INS"
+    SUB_FLT_INS = "TOK_FLT_SUB_INS"
+    MUL_FLT_INS = "TOK_FLT_MUL_INS"
+    DIV_FLT_INS = "TOK_FLT_DIV_INS"
+
+    I32_FLT_INS = "TOK_I32_FLT_INS"
+    FLT_I32_INS = "TOK_FLT_I32_INS"
+
     CALL_INS = "TOK_CALL_INS"
     RECEIVE_INS = "TOK_RECEIVE_INS"
     RETURN_INS = "TOK_RETURN_INS"
@@ -64,11 +73,19 @@ keywords = {
     "noop": Tok.NOOP_INS,
 
     "i32": Tok.I32_INS,
-    "add": Tok.ADD_INS,
-    # "sub": Tok.SUB,
-    "mul": Tok.MUL_INS,
-    "div": Tok.DIV_INS,
-    "mod": Tok.MOD_INS,
+    "add.i32": Tok.ADD_I32_INS,
+    "sub.i32": Tok.SUB_I32_INS,
+    "mul.i32": Tok.MUL_I32_INS,
+    "div.i32": Tok.DIV_I32_INS,
+    "mod.i32": Tok.MOD_I32_INS,
+
+    "add.flt": Tok.ADD_FLT_INS,
+    "sub.flt": Tok.SUB_FLT_INS,
+    "mul.flt": Tok.MUL_FLT_INS,
+    "div.flt": Tok.DIV_FLT_INS,
+
+    "i32.flt": Tok.I32_FLT_INS,
+    "flt.i32": Tok.FLT_I32_INS,
 
     "call": Tok.CALL_INS,
     "receive": Tok.RECEIVE_INS,
@@ -102,7 +119,7 @@ def is_num(c: str) -> bool:
 
 
 def is_alpha_num(c: str) -> bool:
-    return is_alpha(c) or is_num(c)
+    return is_alpha(c) or is_num(c) or c == "."
 
 
 class LexerError(Exception):

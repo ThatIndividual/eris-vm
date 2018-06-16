@@ -49,10 +49,10 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     do_halt:
         printf("Calls done: %" PRIu32 "\n", calls);
-        return;
+    return;
 
     do_noop:
-        DISPATCH();
+    DISPATCH();
 
     #define ARITH(op, type) \
         do { \
@@ -64,39 +64,39 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     do_add_i32:
         ARITH(+, i);
-        DISPATCH();
+    DISPATCH();
 
     do_sub_i32:
         ARITH(-, i);
-        DISPATCH();
+    DISPATCH();
 
     do_mul_i32:
         ARITH(*, i);
-        DISPATCH();
+    DISPATCH();
 
     do_div_i32:
         ARITH(/, i);
-        DISPATCH();
+    DISPATCH();
 
     do_mod_i32:
         ARITH(%, i);
-        DISPATCH();
+    DISPATCH();
 
     do_add_flt:
         ARITH(+, f);
-        DISPATCH();
+    DISPATCH();
 
     do_sub_flt:
         ARITH(-, f);
-        DISPATCH();
+    DISPATCH();
 
     do_mul_flt:
         ARITH(*, f);
-        DISPATCH();
+    DISPATCH();
 
     do_div_flt:
         ARITH(/, f);
-        DISPATCH();
+    DISPATCH();
 
     #undef ARITH
 
@@ -104,9 +104,13 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
         src0 = READ_INS_BYTE();
         dest = READ_INS_BYTE();
         VREG(dest).f = (flt)VREG(src0).i;
+    DISPATCH();
 
     do_flt_to_i32:
-        return;
+        src0 = READ_INS_BYTE();
+        dest = READ_INS_BYTE();
+        VREG(dest).i = (int32_t)VREG(src0).f;
+    DISPATCH();
 
     do_call:
         calls++;
@@ -126,17 +130,17 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
         fp = sp + (2 * VREG_SIZE);
         ip = obj->ins + sub.address;
-        DISPATCH();
+    DISPATCH();
 
     do_receive:
         src0 = READ_INS_BYTE();
         VREG(src0) = ret;
-        DISPATCH();
+    DISPATCH();
 
     do_return:
         src0 = READ_INS_BYTE();
         ret = VREG(src0);
-        /* FALLTHROUGH */
+    /* FALLTHROUGH */
 
     do_return_nil:
         fp = evm->exec_stack_start - ((EVal *)sp)->i;
@@ -146,12 +150,12 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
         sp += VREG_SIZE;
 
         sp = fp - (2 * VREG_SIZE);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp:
         adrs = READ_INS_BYTE();
         ip += adrs;
-        DISPATCH();
+    DISPATCH();
 
     #define CMP_JMP(op) \
         do { \
@@ -164,27 +168,27 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     do_jmp_eq:
         CMP_JMP(==);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_ne:
         CMP_JMP(!=);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_lt:
         CMP_JMP(<)
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_le:
         CMP_JMP(<=);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_gt:
         CMP_JMP(>);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_ge:
         CMP_JMP(>=);
-        DISPATCH();
+    DISPATCH();
 
     #undef CMP_JMP
 
@@ -198,45 +202,45 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     do_jmp_eqz:
         CMPZ_JMP(==);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_nez:
         CMPZ_JMP(!=);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_ltz:
         CMPZ_JMP(<);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_lez:
         CMPZ_JMP(<=);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_gtz:
         CMPZ_JMP(>);
-        DISPATCH();
+    DISPATCH();
 
     do_jmp_gez:
         CMPZ_JMP(>=);
-        DISPATCH();
+    DISPATCH();
 
     #undef CMPZ_JMP
 
     do_cns_i32:
         VREG(*(ip+4)).i = *(int32_t *)ip;
         ip += 5;
-        DISPATCH();
+    DISPATCH();
 
     do_move:
         src0 = READ_INS_BYTE();
         dest = READ_INS_BYTE();
         VREG(dest) = VREG(src0);
-        DISPATCH();
+    DISPATCH();
 
     do_print:
         src0 = READ_INS_BYTE();
-        printf("%" PRIi32 "\n", VREG(src0).i);
-        DISPATCH();
+        printf("%" PRIi32 " %f\n", VREG(src0).i, VREG(src0).f);
+    DISPATCH();
 
     /* unimplemented */
     do_cns_chr: do_cns_flt: do_cns_str: do_load_glb: do_store_glb:

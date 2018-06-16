@@ -71,20 +71,38 @@ class ResolverVisitor(AbstractVisitor):
     def visit_cns_i32_ins(self, cns_i32_ins: CnsI32Ins):
         self.local_addr += 6
 
-    def visit_add_ins(self, add_ins: AddIns):
+    def visit_add_i32_ins(self, add_ins: AddI32Ins):
         self.local_addr += 4
 
-    def visit_sub_ins(self, sub_ins: SubIns):
+    def visit_sub_i32_ins(self, sub_ins: SubI32Ins):
         self.local_addr += 4
 
-    def visit_mul_ins(self, mul_ins: MulIns):
+    def visit_mul_i32_ins(self, mul_ins: MulI32Ins):
         self.local_addr += 4
 
-    def visit_div_ins(self, div_ins: DivIns):
+    def visit_div_i32_ins(self, div_ins: DivI32Ins):
         self.local_addr += 4
 
-    def visit_mod_ins(self, mod_ins: ModIns):
+    def visit_mod_i32_ins(self, mod_ins: ModI32Ins):
         self.local_addr += 4
+
+    def visit_add_flt_ins(self, add_ins: AddFltIns):
+        self.local_addr += 4
+
+    def visit_sub_flt_ins(self, sub_ins: SubFltIns):
+        self.local_addr += 4
+
+    def visit_mul_flt_ins(self, mul_ins: MulFltIns):
+        self.local_addr += 4
+
+    def visit_div_flt_ins(self, div_ins: DivFltIns):
+        self.local_addr += 4
+
+    def visit_i32_flt_ins(self, i32_flt: I32FltIns):
+        self.local_addr += 3
+
+    def visit_flt_i32_ins(self, flt_i32: FltI32Ins):
+        self.local_addr += 3
 
     def visit_call_ins(self, call_ins: CallIns):
         self.local_addr += (3 + len(call_ins.src))

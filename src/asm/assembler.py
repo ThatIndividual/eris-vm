@@ -15,8 +15,8 @@ bytecode = {
     "sub_flt": b"\x08",
     "mul_flt": b"\x09",
     "div_flt": b"\x0A",
-    "i32_to_flt": b"\x0B",
-    "flt_to_i32": b"\x0C",
+    "i32_flt": b"\x0B",
+    "flt_i32": b"\x0C",
     "call": b"\x0D",
     "receive": b"\x0E",
     "return": b"\x0F",
@@ -98,35 +98,69 @@ class AssemblerVisitor(AbstractVisitor):
         return bytecode["cns_i32"] + self.assemble(i32_ins.lit_i32) + \
                self.assemble(i32_ins.dest)
 
-    def visit_add_ins(self, add_ins: AddIns):
+    def visit_add_i32_ins(self, add_ins: AddI32Ins):
         return bytecode["add_i32"] + \
                self.assemble(add_ins.src0) + \
                self.assemble(add_ins.src1) + \
                self.assemble(add_ins.dest)
 
-    def visit_sub_ins(self, sub_ins: SubIns):
+    def visit_sub_i32_ins(self, sub_ins: SubI32Ins):
         return bytecode["sub_i32"] + \
                self.assemble(sub_ins.src0) + \
                self.assemble(sub_ins.src1) + \
                self.assemble(sub_ins.dest)
 
-    def visit_mul_ins(self, mul_ins: MulIns):
+    def visit_mul_i32_ins(self, mul_ins: MulI32Ins):
         return bytecode["mul_i32"] + \
                self.assemble(mul_ins.src0) + \
                self.assemble(mul_ins.src1) + \
                self.assemble(mul_ins.dest)
 
-    def visit_div_ins(self, div_ins: DivIns):
+    def visit_div_i32_ins(self, div_ins: DivI32Ins):
         return bytecode["div_i32"] + \
                self.assemble(div_ins.src0) + \
                self.assemble(div_ins.src1) + \
                self.assemble(div_ins.dest)
 
-    def visit_mod_ins(self, mod_ins: ModIns):
+    def visit_mod_i32_ins(self, mod_ins: ModI32Ins):
         return bytecode["mod_i32"] + \
                self.assemble(mod_ins.src0) + \
                self.assemble(mod_ins.src1) + \
                self.assemble(mod_ins.dest)
+
+    def visit_add_flt_ins(self, add_ins: AddFltIns):
+        return bytecode["add_flt"] + \
+               self.assemble(add_ins.src0) + \
+               self.assemble(add_ins.src1) + \
+               self.assemble(add_ins.dest)
+
+    def visit_sub_flt_ins(self, sub_ins: SubFltIns):
+        return bytecode["sub_flt"] + \
+               self.assemble(sub_ins.src0) + \
+               self.assemble(sub_ins.src1) + \
+               self.assemble(sub_ins.dest)
+
+    def visit_mul_flt_ins(self, mul_ins: MulFltIns):
+        return bytecode["mul_flt"] + \
+               self.assemble(mul_ins.src0) + \
+               self.assemble(mul_ins.src1) + \
+               self.assemble(mul_ins.dest)
+
+    def visit_div_flt_ins(self, div_ins: DivFltIns):
+        return bytecode["div_flt"] + \
+               self.assemble(div_ins.src0) + \
+               self.assemble(div_ins.src1) + \
+               self.assemble(div_ins.dest)
+
+    def visit_i32_flt_ins(self, i32_flt: I32FltIns):
+        return bytecode["i32_flt"] + \
+               self.assemble(i32_flt.src0) + \
+               self.assemble(i32_flt.dest)
+
+    def visit_flt_i32_ins(self, flt_i32: FltI32Ins):
+        return bytecode["flt_i32"] + \
+               self.assemble(flt_i32.src0) + \
+               self.assemble(flt_i32.dest)
 
     def visit_call_ins(self, call_ins: CallIns):
         code = bytecode["call"] + pack("<B", call_ins.sub) + pack("<B", len(call_ins.src))
