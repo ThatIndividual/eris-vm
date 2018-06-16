@@ -28,8 +28,9 @@ int main(int argc, char *argv[])
 
 void Evm_run_Obj(struct evm *evm, struct obj *obj)
 {
+    #define READ_INS_BYTE() *ip++
     #define AS_DISPATCH(x, y) &&do_ ## y,
-    #define DISPATCH() goto *dispatch_table[*ip++]
+    #define DISPATCH() goto *dispatch_table[READ_INS_BYTE()]
     #define VREG(x) (*(EVal *)(fp+((x)*VREG_SIZE)))
     static void *dispatch_table[] = { INS_TABLE(AS_DISPATCH) };
 
@@ -55,9 +56,9 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     #define ARITH(op, type) \
         do { \
-            src0 = *ip++; \
-            src1 = *ip++; \
-            dest = *ip++; \
+            src0 = READ_INS_BYTE(); \
+            src1 = READ_INS_BYTE(); \
+            dest = READ_INS_BYTE(); \
             VREG(dest).type = VREG(src0).type op VREG(src1).type; \
         } while(0)
 
@@ -100,8 +101,8 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #undef ARITH
 
     do_i32_to_flt:
-        src0 = *ip++;
-        dest = *ip++;
+        src0 = READ_INS_BYTE();
+        dest = READ_INS_BYTE();
         VREG(dest).f = (flt)VREG(src0).i;
 
     do_flt_to_i32:
@@ -109,12 +110,12 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     do_call:
         calls++;
-        src0 = *ip++; // sub index
-        src1 = *ip++; // number of arguments
+        src0 = READ_INS_BYTE(); // sub index
+        src1 = READ_INS_BYTE(); // number of arguments
         sub = obj->subs[src0];
 
         for (; src1 != 0; src1--) {
-            ret = VREG(*ip++);
+            ret = VREG(READ_INS_BYTE());
             ((EVal *)(sp -= VREG_SIZE))->i = ret.i;
         }
 
@@ -128,12 +129,12 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
         DISPATCH();
 
     do_receive:
-        src0 = *ip++;
+        src0 = READ_INS_BYTE();
         VREG(src0) = ret;
         DISPATCH();
 
     do_return:
-        src0 = *ip++;
+        src0 = READ_INS_BYTE();
         ret = VREG(src0);
         /* FALLTHROUGH */
 
@@ -148,15 +149,15 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
         DISPATCH();
 
     do_jmp:
-        adrs = *ip++;
+        adrs = READ_INS_BYTE();
         ip += adrs;
         DISPATCH();
 
     #define CMP_JMP(op) \
         do { \
-            adrs = *ip++; \
-            src0 = *ip++; \
-            src1 = *ip++; \
+            adrs = READ_INS_BYTE(); \
+            src0 = READ_INS_BYTE(); \
+            src1 = READ_INS_BYTE(); \
             if (VREG(src0).i op VREG(src1).i) \
                 ip += adrs; \
         } while(0);
@@ -189,8 +190,8 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     #define CMPZ_JMP(op) \
         do { \
-            adrs = *ip++; \
-            src0 = *ip++; \
+            adrs = READ_INS_BYTE(); \
+            src0 = READ_INS_BYTE(); \
             if (VREG(src0).i op 0) \
                 ip += adrs; \
         } while(0);
@@ -227,13 +228,13 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
         DISPATCH();
 
     do_move:
-        src0 = *ip++;
-        dest = *ip++;
+        src0 = READ_INS_BYTE();
+        dest = READ_INS_BYTE();
         VREG(dest) = VREG(src0);
         DISPATCH();
 
     do_print:
-        src0 = *ip++;
+        src0 = READ_INS_BYTE();
         printf("%" PRIi32 "\n", VREG(src0).i);
         DISPATCH();
 
