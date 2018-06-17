@@ -25,6 +25,10 @@ class AbstractVisitor(ABC):
         pass
 
     @abstractmethod
+    def visit_cns_flt_ins(self, cns_flt_ins: CnsFltIns):
+        pass
+
+    @abstractmethod
     def visit_add_i32_ins(self, add_ins: AddI32Ins):
         pass
 
@@ -142,6 +146,10 @@ class AbstractVisitor(ABC):
 
     @abstractmethod
     def visit_lit_i32(self, lit_i32: LitI32):
+        pass
+
+    @abstractmethod
+    def visit_lit_flt(self, lit_flt: LitFlt):
         pass
 
     @abstractmethod

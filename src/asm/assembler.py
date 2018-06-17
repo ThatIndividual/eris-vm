@@ -94,9 +94,13 @@ class AssemblerVisitor(AbstractVisitor):
     def visit_noop_ins(self, nop_ins: NoopIns):
         return bytecode["noop"]
 
-    def visit_cns_i32_ins(self, i32_ins: CnsI32Ins):
-        return bytecode["cns_i32"] + self.assemble(i32_ins.lit_i32) + \
-               self.assemble(i32_ins.dest)
+    def visit_cns_i32_ins(self, cns_i32_ins: CnsI32Ins):
+        return bytecode["cns_i32"] + self.assemble(cns_i32_ins.lit_i32) + \
+               self.assemble(cns_i32_ins.dest)
+
+    def visit_cns_flt_ins(self, cns_flt_ins: CnsFltIns):
+        return bytecode["cns_flt"] + self.assemble(cns_flt_ins.lit_flt) + \
+               self.assemble(cns_flt_ins.dest)
 
     def visit_add_i32_ins(self, add_ins: AddI32Ins):
         return bytecode["add_i32"] + \
@@ -265,6 +269,9 @@ class AssemblerVisitor(AbstractVisitor):
 
     def visit_lit_i32(self, lit_i32: LitI32):
         return pack("<i", int(lit_i32.i32_tok.lexeme))
+
+    def visit_lit_flt(self, lit_flt: LitFlt):
+        return pack("<f", float(lit_flt.flt_tok.lexeme))
 
     def visit_label(self, label: Label):
         return b""

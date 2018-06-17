@@ -16,5 +16,10 @@ sub main(args=0, locs=3) do
     mul.i32 r0 r1 r2
     print r2
 
+    i32 -10 r0
+    i32 -5 r1
+    add.i32 r0 r1 r2
+    print r2
+
     halt
 end

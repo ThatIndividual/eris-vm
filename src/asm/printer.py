@@ -34,6 +34,11 @@ class PrintVisitor(AbstractVisitor):
                                       cls.print(cns_i32_ins.dest))
 
     @classmethod
+    def visit_cns_flt_ins(cls, cns_flt_ins: CnsFltIns):
+        return "    FLT {} {}".format(cls.print(cns_flt_ins.lit_flt),
+                                      cls.print(cns_flt_ins.dest))
+
+    @classmethod
     def visit_add_i32_ins(cls, add_stm: AddI32Ins):
         return "    ADD.I32 {} {} {}".format(cls.print(add_stm.src0),
                                              cls.print(add_stm.src1),
@@ -197,6 +202,10 @@ class PrintVisitor(AbstractVisitor):
     @classmethod
     def visit_lit_i32(cls, lit_i32: LitI32):
         return lit_i32.i32_tok.lexeme
+
+    @classmethod
+    def visit_lit_flt(cls, lit_flt: LitFlt):
+        return lit_flt.flt_tok.lexeme
 
     @classmethod
     def visit_register(cls, reg: Register):

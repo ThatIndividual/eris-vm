@@ -62,8 +62,11 @@ class Parser:
             return HaltIns()
         elif self.tok_matches(Tok.NOOP_INS):
             return NoopIns()
+
         elif self.tok_matches(Tok.I32_INS):
             return self.i32_ins()
+        elif self.tok_matches(Tok.FLT_INS):
+            return self.flt_ins()
 
         elif self.tok_matches(Tok.ADD_I32_INS):
             return self.add_i32_ins()
@@ -136,6 +139,12 @@ class Parser:
         lit = self.lit_i32()
         dest = self.register()
         return CnsI32Ins(lit, dest)
+
+    def flt_ins(self):
+        # flt_ins -> ^FLT^ lit_flt register
+        lit = self.lit_flt()
+        dest = self.register()
+        return CnsFltIns(lit, dest)
 
     def add_i32_ins(self):
         # add_i32_ins -> ^ADD^ register register register
@@ -351,6 +360,12 @@ class Parser:
             return LitI32(self.prev_tok)
         else:
             raise ParserError(self.this_tok, "Expected a 32 bit integer")
+
+    def lit_flt(self):
+        if self.tok_matches(Tok.FLT_LIT):
+            return LitFlt(self.prev_tok)
+        else:
+            raise ParserError(self.this_tok, "Expected a float")
 
     def label(self):
         if self.tok_matches(Tok.LABEL):

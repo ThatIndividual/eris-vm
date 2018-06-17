@@ -37,6 +37,15 @@ class CnsI32Ins:
         return visitor.visit_cns_i32_ins(self)
 
 
+class CnsFltIns:
+    def __init__(self, lit_flt, dest):
+        self.lit_flt = lit_flt
+        self.dest = dest
+
+    def accept(self, visitor):
+        return visitor.visit_cns_flt_ins(self)
+
+
 class AddI32Ins:
     def __init__(self, src0, src1, dest):
         self.src0 = src0
@@ -316,6 +325,14 @@ class LitI32:
 
     def accept(self, visitor):
         return visitor.visit_lit_i32(self)
+
+
+class LitFlt:
+    def __init__(self, flt_tok):
+        self.flt_tok = flt_tok
+
+    def accept(self, visitor):
+        return visitor.visit_lit_flt(self)
 
 
 class Register:

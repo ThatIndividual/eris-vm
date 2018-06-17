@@ -231,6 +231,11 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
         ip += 5;
     DISPATCH();
 
+    do_cns_flt:
+        VREG(*(ip+4)).f = *(flt *)ip;
+        ip += 5;
+    DISPATCH();
+
     do_move:
         src0 = READ_INS_BYTE();
         dest = READ_INS_BYTE();
@@ -243,7 +248,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     DISPATCH();
 
     /* unimplemented */
-    do_cns_chr: do_cns_flt: do_cns_str: do_load_glb: do_store_glb:
+    do_cns_chr: do_cns_str: do_load_glb: do_store_glb:
         return;
 
     #undef V

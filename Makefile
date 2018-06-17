@@ -3,7 +3,7 @@ CFLAGS = -O3 -fno-strict-aliasing
 
 ASSEMBLER = ./src/asm/asm.py
 
-CODE = arith discr fac_rec fib fib_rec gcd isPrime pdist subs
+CODE = arith discr fac_rec fib_loop fib_rec gcd isPrime pdist subs
 AUR_TRG = $(addprefix aur-code/, $(addsuffix .aur, $(CODE)))
 VM_SRC = $(addprefix src/vm/, run.c evm.c obj.c)
 

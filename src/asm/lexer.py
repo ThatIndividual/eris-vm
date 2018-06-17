@@ -18,6 +18,7 @@ class Tok(Enum):
 
     DOUBLE = "TOK_DOUBLE"
     I32_LIT = "TOK_I32_LIT"
+    FLT_LIT = "TOK_FLT_LIT"
     LABEL = "TOK_LABEL"
     AT_LOCATION = "TOK_AT_LOCATION"
 
@@ -25,6 +26,7 @@ class Tok(Enum):
     NOOP_INS = "TOK_NOOP_INS"
 
     I32_INS = "TOK_I32_INS"
+    FLT_INS = "TOK_FLT_INS"
     ADD_I32_INS = "TOK_I32_ADD_INS"
     SUB_I32_INS = "TOK_I32_SUB_INS"
     MUL_I32_INS = "TOK_I32_MUL_INS"
@@ -73,6 +75,7 @@ keywords = {
     "noop": Tok.NOOP_INS,
 
     "i32": Tok.I32_INS,
+    "flt": Tok.FLT_INS,
     "add.i32": Tok.ADD_I32_INS,
     "sub.i32": Tok.SUB_I32_INS,
     "mul.i32": Tok.MUL_I32_INS,
@@ -184,10 +187,9 @@ class Lexer:
 
         if is_alpha(char):
             return self.identifier()
-        if is_num(char):
+        elif is_num(char) or char == '-':
             return self.number()
-
-        if char == "\0":
+        elif char == "\0":
             return self.tok(Tok.EOF)
         elif char == "@":
             return self.at_location()
@@ -231,7 +233,7 @@ class Lexer:
                 break
 
         if is_double:
-            raise LexerError("Floats are not supported", self.lineno)
+            return self.tok(Tok.FLT_LIT)
         else:
             return self.tok(Tok.I32_LIT)
 

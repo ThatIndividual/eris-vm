@@ -71,6 +71,9 @@ class ResolverVisitor(AbstractVisitor):
     def visit_cns_i32_ins(self, cns_i32_ins: CnsI32Ins):
         self.local_addr += 6
 
+    def visit_cns_flt_ins(self, cns_flt_ins: CnsFltIns):
+        self.local_addr += 6
+
     def visit_add_i32_ins(self, add_ins: AddI32Ins):
         self.local_addr += 4
 
@@ -176,6 +179,9 @@ class ResolverVisitor(AbstractVisitor):
         self.local_addr += 2
 
     def visit_lit_i32(self, lit_i32: LitI32):
+        pass
+
+    def visit_lit_flt(self, lit_flt: LitFlt):
         pass
 
     def visit_register(self, reg: Register):

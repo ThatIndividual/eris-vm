@@ -26,13 +26,10 @@ end
 
 
 sub sqrt(args=1, locs=5) do
-    i32 1 r1
-    i32 2 r2
+    flt 1.0 r1
+    flt 2.0 r2
     i32 1 r3
     i32 10 r4
-
-    i32.flt r1 r1
-    i32.flt r2 r2
 
 loop:
     div.flt r0 r1 r5
