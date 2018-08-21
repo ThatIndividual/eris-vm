@@ -34,7 +34,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     #define VREG(x) (*(EVal *)(fp+((x)*VREG_SIZE)))
     static void *dispatch_table[] = { INS_TABLE(AS_DISPATCH) };
 
-    uint32_t calls = 0;
+    uint32_t calls = 0, stack_depth = 0, max_stack_depth = 0;
 
     uint8_t src0, src1, dest;
     EVal ret;
@@ -49,6 +49,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     do_halt:
         printf("Calls done: %" PRIu32 "\n", calls);
+        printf("Max stack depth: %" PRIu32 "\n", max_stack_depth);
     return;
 
     do_noop:
@@ -114,6 +115,9 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
 
     do_call:
         calls++;
+        stack_depth++;
+        if (stack_depth > max_stack_depth)
+            max_stack_depth = stack_depth;
         src0 = READ_INS_BYTE(); // sub index
         src1 = READ_INS_BYTE(); // number of arguments
         sub = obj->subs[src0];
@@ -138,6 +142,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     DISPATCH();
 
     do_return:
+        stack_depth--;
         src0 = READ_INS_BYTE();
         ret = VREG(src0);
     /* FALLTHROUGH */
