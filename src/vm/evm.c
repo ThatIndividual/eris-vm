@@ -4,10 +4,11 @@
 #include "common.h"
 #include "evm.h"
 
-struct evm *Evm_new()
+struct evm *Evm_new(struct obj *obj)
 {
     struct evm *evm = malloc(sizeof(struct evm));
 
+    evm->obj = obj;
     evm->ip = 0;
     evm->exec_stack_cap = 1024 * 1024;
     evm->exec_stack = malloc(evm->exec_stack_cap);

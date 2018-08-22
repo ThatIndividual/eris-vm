@@ -7,7 +7,7 @@
 #include "ins.h"
 #include "value.h"
 
-void Evm_run_Obj(struct evm*, struct obj*);
+void Evm_run(struct evm*);
 
 int main(int argc, char *argv[])
 {
@@ -20,13 +20,13 @@ int main(int argc, char *argv[])
         struct obj *obj = Obj_read(argv[1]);
         struct evm *evm = Evm_new(obj);
 
-        Evm_run_Obj(evm, obj);
+        Evm_run(evm);
     }
 
     return 0;
 }
 
-void Evm_run_Obj(struct evm *evm, struct obj *obj)
+void Evm_run(struct evm *evm)
 {
     #define READ_INS_BYTE() *ip++
     #define AS_DISPATCH(x, y) &&do_ ## y,
@@ -41,6 +41,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
     int8_t adrs;
     struct sub_desc sub;
 
+    struct obj *obj = evm->obj;
     uint8_t *ip = obj->ins + evm->ip;
     void *sp = evm->sp;
     void *fp = evm->fp;
@@ -118,6 +119,7 @@ void Evm_run_Obj(struct evm *evm, struct obj *obj)
         stack_depth++;
         if (stack_depth > max_stack_depth)
             max_stack_depth = stack_depth;
+
         src0 = READ_INS_BYTE(); // sub index
         src1 = READ_INS_BYTE(); // number of arguments
         sub = obj->subs[src0];

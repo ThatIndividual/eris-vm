@@ -6,6 +6,7 @@
 #include "value.h"
 
 struct evm {
+    struct obj *obj;
     uint32_t ip;
     uint32_t exec_stack_cap;
     void *exec_stack;
